@@ -1,5 +1,5 @@
 # TikTok Shop Creator Performance Tracker
-A data analytics dashboard built for TikTok Shop creators to track daily performance metrics, identify monetization trends, and evaluate efficiency of content over time.
+A data analytics dashboard built for TikTok Shop creators to track daily performance metrics and evaluate efficiency of content over time.
 
 Built with Python, Streamlit, SQLite, Pandas, and Plotly.
 
