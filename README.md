@@ -25,7 +25,7 @@ Built with Python, Streamlit, SQLite, Pandas, and Plotly.
 
 ## Installation
 ```bash
-git clone https://github.com/yourusername/tiktok-shop-tracker.git
+git clone https://github.com/maximusflo/TikTok-Shop-Creator-Performance-Tracker.git
 cd tiktok-shop-tracker
 ```
 
