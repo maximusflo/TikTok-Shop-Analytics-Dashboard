@@ -25,7 +25,6 @@ Built with Python, Streamlit, SQLite, Pandas, and Plotly.
 - Average Commission Rate
 - Revenue per Thousand Views (RPM)
 
-
 ## Installation
 ```bash
 git clone https://github.com/maximusflo/TikTok-Shop-Analytics-Dashboard.git
@@ -62,8 +61,9 @@ streamlit run app.py
 - Video logging
 - Correlation visualizations
 - Goal tracking
-
-
+- Product click metric
+- Attributed GMV metric
+- Commission base metric
 
 ## Author 
 Max Floren  
