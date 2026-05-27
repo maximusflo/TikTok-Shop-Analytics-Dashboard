@@ -117,6 +117,7 @@ with tab2:
     one, two, three, four, five = st.columns(5)
 
     # filter dates
+    single_day = False
     with one:
         df['date'] = pd.to_datetime(df['date']).dt.date
 
@@ -136,6 +137,9 @@ with tab2:
             end_date = date_range[0]
 
         filtered_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)] if not df.empty else pd.DataFrame(columns=df.columns)
+
+        if start_date == end_date:
+            single_day = True
     
     col1, col2, col3, col4, col5 = st.columns(5)
 
@@ -153,49 +157,59 @@ with tab2:
     with col1:  # commission
         if filtered_df.empty:
             st.metric('Total Commission', '$0')
-            st.metric('Avg. Daily Commission', '$0')
+            if not single_day:
+                st.metric('Avg. Daily Commission', '$0')
             #st.metric('Highest Commission Day', '-')
         else:
             st.metric('Total Commission', f"${filtered_df['commission'].sum():,.2f}")
-            st.metric('Avg. Daily Commission', f"${filtered_df['commission'].mean():,.2f}")
+            if not single_day:
+                st.metric('Avg. Daily Commission', f"${filtered_df['commission'].mean():,.2f}")
             #st.metric('Highest Commission Day', f"${max_commission_row['commission']:,.2f}")
 
     with col2:  # GMV
         if filtered_df.empty:
             st.metric('Total GMV', '$0')
-            st.metric('Avg. Daily GMV', '$0')
+            if not single_day:
+                st.metric('Avg. Daily GMV', '$0')
             #st.metric('Highest GMV Day', '-')
         else:
             st.metric('Total GMV', f"${filtered_df['gmv'].sum():,.2f}")
-            st.metric('Avg. Daily GMV', f"${filtered_df['gmv'].mean():,.2f}")
+            if not single_day:
+                st.metric('Avg. Daily GMV', f"${filtered_df['gmv'].mean():,.2f}")
             #st.metric('Highest GMV Day', f"${max_gmv_row['gmv']:,.2f}")
 
     with col3:  # items sold
         if filtered_df.empty:
             st.metric('Total Items Sold', '0')
-            st.metric('Avg. Daily Items Sold', '0')
+            if not single_day:
+                st.metric('Avg. Daily Items Sold', '0')
             #st.metric('Highest Item Sales Day', '-')
         else:
             st.metric('Total Items Sold', f"{int(filtered_df['items_sold'].sum()):,}")
-            st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}")
+            if not single_day:
+                st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}")
             #st.metric('Highest Item Sales Day', f"{max_items_row['items_sold']:,}")
 
     with col4:
         if filtered_df.empty:
             st.metric('Total Videos Posted', '0')
-            st.metric('Avg. Daily Videos Posted', '0')
+            if not single_day:
+                st.metric('Avg. Daily Videos Posted', '0')
         else:
             st.metric('Total Videos Posted', f"{int(filtered_df['videos'].sum()):,}")
-            st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}")
+            if not single_day:
+                st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}")
     
     with col5:  # views
         if filtered_df.empty:
             st.metric('Total Views', '0')
-            st.metric('Avg. Daily Views', '0')
+            if not single_day:
+                st.metric('Avg. Daily Views', '0')
             #st.metric('Highest View Day', '-')
         else:
             st.metric('Total Views', f"{filtered_df['views'].sum():,}")
-            st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}")
+            if not single_day:
+                st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}")
             #st.metric('Highest View Day', f"{max_views_row['views']:,}")
 
     c1, c2, c3 = st.columns(3)
@@ -209,9 +223,9 @@ with tab2:
             if avg_c_rate >= 20:
                 quality = 'Excellent'
             elif avg_c_rate >= 15:
-                quality = 'Good'
+                quality = 'Great'
             elif avg_c_rate >= 10:
-                quality = 'Standard'
+                quality = 'Good'
             elif avg_c_rate >= 5:
                 quality = 'Weak'
             else:
@@ -225,20 +239,37 @@ with tab2:
             st.metric('Conversion Rate', '-')
         else: 
             conv_rate = metrics.conversion_rate(filtered_df)
-            if conv_rate >= 0.2:
-                quality = 'Elite'
-            elif conv_rate >= 0.1:
+            if conv_rate >= 0.20:
                 quality = 'Excellent'
-            elif conv_rate >= 0.05:
+            elif conv_rate >= 0.10:
                 quality = 'Great'
-            elif conv_rate >= 0.01:
+            elif conv_rate >= 0.05:
                 quality = 'Good'
-            elif conv_rate >= 0.005:
+            elif conv_rate >= 0.01:
                 quality = 'Weak'
             else:
                 quality = 'Poor'
 
             st.metric('Conversion Rate', f"{conv_rate}% - {quality}")
+
+    # display RPM and quality
+    with c3:
+        if filtered_df.empty or filtered_df['views'].sum() == 0:
+            st.metric('RPM', '-')
+        else:
+            rpm = metrics.rpm(filtered_df)
+            if rpm >= 15:
+                quality = 'Excellent'
+            elif rpm >= 5:
+                quality = 'Great'
+            elif rpm >= 2.5:
+                quality = 'Good'
+            elif rpm >= 1:
+                quality = 'Weak'
+            else:
+                quality = 'Poor'
+
+            st.metric('RPM', f'${rpm} - {quality}')
 
     left, right = st.columns(2)
 
