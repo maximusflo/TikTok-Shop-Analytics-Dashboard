@@ -25,3 +25,16 @@ def conversion_rate(df):
 
     conv_rate = conversions / views * 100
     return round(conv_rate, 4)
+
+def rpm(df):
+    '''
+    Calculates commission per 1,000 views.
+    '''
+    commission = df['commission'].sum()
+    views = df['views'].sum()
+
+    if views == 0:
+        return 0
+    
+    rpm = commission / views * 1000
+    return round(rpm, 2)
