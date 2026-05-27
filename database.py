@@ -16,5 +16,4 @@ def initialize_database(connection):
         views INTEGER NOT NULL
     )
     ''')
-
     connection.commit()
