@@ -12,6 +12,7 @@ Built with Python, Streamlit, SQLite, Pandas, and Plotly.
 - Metric calculations
 - Commission rate analysis
 - Conversion rate analysis
+- RPM analysis
 - Visualizations
 
 ## Metrics Tracked
@@ -22,6 +23,8 @@ Built with Python, Streamlit, SQLite, Pandas, and Plotly.
 - Views
 - Conversion Rate
 - Average Commission Rate
+- Revenue per Thousand Views (RPM)
+
 
 ## Installation
 ```bash
@@ -56,7 +59,6 @@ streamlit run app.py
 - Performance grading/rank system
 - User authentication
 - Revenue forecasting
-- Revenue Per 1,000 Views (RMP) metric
 - Video logging
 - Correlation visualizations
 - Goal tracking
