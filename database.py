@@ -1,6 +1,6 @@
 import sqlite3
 
-def get_conection():
+def get_connection():
     return sqlite3.connect('data.db')
 
 def initialize_database(connection):

@@ -7,7 +7,7 @@ import metrics
 import utils
 import database
 
-connection = database.get_conection()
+connection = database.get_connection()
 cursor = connection.cursor()
 database.initialize_database(connection)
 
