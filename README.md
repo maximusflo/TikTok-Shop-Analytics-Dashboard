@@ -3,6 +3,8 @@ A data analytics dashboard built for TikTok Shop creators to track daily perform
 
 Built with Python, Streamlit, SQLite, Pandas, and Plotly.
 
+**[Live Demo](https://tiktok-shop-analytics-dashboard.streamlit.app/)**
+
 ## Features
 - Daily performance logging
 - Editable past entries
