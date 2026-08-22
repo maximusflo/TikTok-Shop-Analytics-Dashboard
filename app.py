@@ -124,10 +124,10 @@ with tab2:
         if not df.empty:
             min_date = df['date'].min()
             max_date = df['date'].max()
-            date_range = st.date_input('Date Range', value=(min_date, max_date))
+            date_range = st.date_input('Date Range', value=(min_date, max_date), key='date_range')
         else:
             today = datetime.date.today()
-            date_range = st.date_input('Date Range', value=(today, today))
+            date_range = st.date_input('Date Range', value=(today, today), key='date_range')
 
         if isinstance(date_range, tuple) and len(date_range) == 2:
             start_date = date_range[0]
@@ -135,10 +135,25 @@ with tab2:
         else:
             start_date = date_range[0]
             end_date = date_range[0]
+    
+    with two:
+        column1, column2, column3 = st.columns(3)
+        with column1:
+            if st.button('Today', use_container_width=True):
+                today = datetime.date.today()
+                date_range = (today, today)
+                start_date = date_range[0]
+                end_date = date_range[0]
+        with column2:
+            if st.button('Yesterday', use_container_width=True):
+                yesterday = datetime.date.today() - datetime.timedelta(days=1)
+                date_range = (yesterday, yesterday)
+                start_date = date_range[0]
+                end_date = date_range[0]
 
-        filtered_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)] if not df.empty else pd.DataFrame(columns=df.columns)
+    filtered_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)] if not df.empty else pd.DataFrame(columns=df.columns)
 
-        if start_date == end_date:
+    if start_date == end_date:
             single_day = True
     
     col1, col2, col3, col4, col5 = st.columns(5)
@@ -258,11 +273,11 @@ with tab2:
             st.metric('RPM', '-')
         else:
             rpm = metrics.rpm(filtered_df)
-            if rpm >= 15:
+            if rpm >= 10:
                 quality = 'Excellent'
             elif rpm >= 5:
                 quality = 'Great'
-            elif rpm >= 2.5:
+            elif rpm >= 1.5:
                 quality = 'Good'
             elif rpm >= 1:
                 quality = 'Weak'
