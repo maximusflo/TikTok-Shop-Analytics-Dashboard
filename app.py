@@ -301,6 +301,7 @@ with tab2:
         views_fig.update_traces(line=dict(color='royalblue'))
         st.plotly_chart(views_fig, width='stretch')
 
+    '''
     # GMV line chart
     with left:
         gmv_fig = px.line(filtered_df, x='date', y='gmv', title='Daily GMV')
@@ -308,10 +309,12 @@ with tab2:
         gmv_fig.update_layout(yaxis=(dict(tickprefix='$')))
         st.plotly_chart(gmv_fig, width='stretch')
 
-    with right: # videos posted line chart
+    # videos posted line chart
+    with right:
         items_fig = px.line(filtered_df, x='date', y='videos', title='Daily Videos Posted')
         items_fig.update_traces(line=dict(color='orange'))
         st.plotly_chart(items_fig, width='stretch')
+    '''
 
 # Data tab
 with tab3:
