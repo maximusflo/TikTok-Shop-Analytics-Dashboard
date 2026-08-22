@@ -286,35 +286,27 @@ with tab2:
 
             st.metric('RPM', f'${rpm} - {quality}')
 
-    left, right = st.columns(2)
-
     # commission line chart
-    with left:
-        commission_fig = px.line(filtered_df, x='date', y='commission', title='Daily Commission')
-        commission_fig.update_traces(line=dict(color='springgreen'))
-        commission_fig.update_layout(yaxis=(dict(tickprefix='$')))
-        st.plotly_chart(commission_fig, width='stretch')
+    commission_fig = px.line(filtered_df, x='date', y='commission', title='Daily Commission')
+    commission_fig.update_traces(line=dict(color='springgreen'))
+    commission_fig.update_layout(yaxis=(dict(tickprefix='$')))
+    st.plotly_chart(commission_fig, width='stretch')
     
     # views line chart
-    with right:
-        views_fig = px.line(filtered_df, x='date', y='views', title='Daily Views')
-        views_fig.update_traces(line=dict(color='royalblue'))
-        st.plotly_chart(views_fig, width='stretch')
+    views_fig = px.line(filtered_df, x='date', y='views', title='Daily Views')
+    views_fig.update_traces(line=dict(color='royalblue'))
+    st.plotly_chart(views_fig, width='stretch')
 
-    '''
     # GMV line chart
-    with left:
-        gmv_fig = px.line(filtered_df, x='date', y='gmv', title='Daily GMV')
-        gmv_fig.update_traces(line=dict(color='green'))
-        gmv_fig.update_layout(yaxis=(dict(tickprefix='$')))
-        st.plotly_chart(gmv_fig, width='stretch')
+    #    gmv_fig = px.line(filtered_df, x='date', y='gmv', title='Daily GMV')
+    #    gmv_fig.update_traces(line=dict(color='green'))
+    #    gmv_fig.update_layout(yaxis=(dict(tickprefix='$')))
+    #    st.plotly_chart(gmv_fig, width='stretch')
 
     # videos posted line chart
-    with right:
-        items_fig = px.line(filtered_df, x='date', y='videos', title='Daily Videos Posted')
-        items_fig.update_traces(line=dict(color='orange'))
-        st.plotly_chart(items_fig, width='stretch')
-    '''
+    #    items_fig = px.line(filtered_df, x='date', y='videos', title='Daily Videos Posted')
+    #    items_fig.update_traces(line=dict(color='orange'))
+    #    st.plotly_chart(items_fig, width='stretch')
 
 # Data tab
 with tab3:
