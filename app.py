@@ -1,25 +1,40 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-import sqlite3
 import datetime
 import metrics
 import utils
 import database
-
-connection = database.get_connection()
-cursor = connection.cursor()
-database.initialize_database(connection)
-
+from sqlalchemy import text
 
 st.set_page_config(layout='wide')
 
-st.title('TikTok Shop Creator Performance Tracker')
+# user authentication
+if not st.user.is_logged_in:
+    st.title("TikTok Shop Creator Performance Dashboard")
+    st.divider()
+    st.write("### Get started")
+    st.button(
+        "Sign in with Google",
+        on_click=st.login
+    )
+    st.stop()
 
+user_id = st.user.email
+
+# initialize database
+connection = database.get_connection()
+
+st.title("TikTok Shop Creator Performance Tracker")
+
+# side bar
+st.sidebar.write(f'Logged in as {st.user.name}')
+st.sidebar.write(f'Email: {st.user.email}')
+st.sidebar.button('Log out', on_click=st.logout)
 
 tab1, tab2, tab3 = st.tabs(['Daily Log', 'Analytics', 'Data'])
 
-df = utils.load_data(connection)
+df = utils.load_data(connection, user_id)
 
 # Daily Log tab
 with tab1:
@@ -54,61 +69,60 @@ with tab1:
         button_label = 'Update'
 
     if st.button(button_label):
-        data = {
-            'date' : [current_date],
-            'commission' : [commission],
-            'gmv' : [gmv],
-            'items_sold' : [items_sold],
-            'videos' : [videos],
-            'views' : [views]
-        }
-        new_df = pd.DataFrame(data)
 
         # adding a new entry to data
         if str(current_date) not in df['date'].astype(str).values:
-            cursor.execute(
-                '''
-                INSERT INTO daily_stats
-                (date, commission, gmv, items_sold, videos, views)
-                VALUES (?, ?, ?, ?, ?, ?)
-                ''',
-                (
-                    str(current_date),
-                    commission,
-                    gmv,
-                    items_sold,
-                    videos,
-                    views
+
+            with connection.session as session:
+                session.execute(
+                    text('''
+                        INSERT INTO daily_stats
+                        (user_id, date, commission, gmv, items_sold, videos, views)
+                        VALUES (:user_id, :date, :commission, :gmv, :items_sold, :videos, :views)
+                    '''),
+                    {
+                        'user_id': user_id,
+                        'date': str(current_date),
+                        'commission': commission,
+                        'gmv': gmv,
+                        'items_sold': items_sold,
+                        'videos': videos,
+                        'views': views
+                    }
                 )
-            )
-            connection.commit()
-            df = utils.load_data(connection)
+                
+                session.commit()
+
+            df = utils.load_data(connection, user_id)
             st.success(f'Saved entry for {current_date}.')
 
         # updating existing entry
         else:
-            cursor.execute(
-                '''
-                UPDATE daily_stats
-                SET
-                    commission = ?,
-                    gmv = ?,
-                    items_sold = ?,
-                    videos = ?,
-                    views = ?
-                WHERE date = ?
-                ''',
-                (
-                    commission,
-                    gmv,
-                    items_sold,
-                    videos,
-                    views,
-                    str(current_date)
+            with connection.session as session:
+                session.execute(
+                    text('''
+                        UPDATE daily_stats
+                        SET
+                            commission = :commission,
+                            gmv = :gmv,
+                            items_sold = :items_sold,
+                            videos = :videos,
+                            views = :views
+                        WHERE user_id = :user_id AND date = :date
+                    '''),
+                    {
+                        'commission': commission,
+                        'gmv': gmv,
+                        'items_sold': items_sold,
+                        'videos': videos,
+                        'views': views,
+                        'user_id': user_id,
+                        'date': str(current_date)
+                    }
                 )
-            )
-            connection.commit()
-            df = utils.load_data(connection)
+                session.commit()
+
+            df = utils.load_data(connection, user_id)
             warning_box.empty()
             st.success(f'Updated entry for {current_date}')
 
@@ -326,5 +340,3 @@ with tab3:
                 hide_index=True,
                 width='stretch'
         )
-
-connection.close()

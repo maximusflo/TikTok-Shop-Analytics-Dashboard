@@ -10,14 +10,14 @@ def sort_df_by_date(df):
     df = df.sort_values(by='date')
     return df
 
-def load_data(connection):
+def load_data(connection, user_id):
     '''
-    Loads all dat from SQLite database.
+    Loads data for logged-in user from PostgreSQL database.
     Returns sorted dataframe.
     '''
-    query = 'SELECT * FROM daily_stats'
+    query = '''SELECT date, commission, gmv, items_sold, videos, views FROM daily_stats WHERE user_id = :user_id'''
     
-    df = pd.read_sql_query(query, connection)
+    df = connection.query(query, params={'user_id': user_id}, ttl=0)
 
     if df.empty:
         return pd.DataFrame(columns = [
@@ -36,7 +36,7 @@ def load_data(connection):
 def date_exists(df, date):
     '''
     Takes dataframe and date as arguements.
-    Returns true if date exists in dateframe.
+    Returns true if date exists in dataframe.
     '''
     return str(date) in df['date'].astype(str).values
 

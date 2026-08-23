@@ -1,4 +1,7 @@
 __pycache__/
 .env
 data.db
+data_original.db
+data_copy.db
 print_database.py
+.streamlit/secrets.toml
