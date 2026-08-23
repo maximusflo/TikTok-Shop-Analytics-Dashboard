@@ -61,6 +61,7 @@ Each user's data is associated with their authenticated account.
 - Attributed GMV metric
 - Commission base metric
 - Row Level Security
+- Demo mode
 
 ## Author 
 **Max Floren**  
