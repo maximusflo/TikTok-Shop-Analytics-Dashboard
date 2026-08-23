@@ -1,14 +1,15 @@
 # TikTok Shop Analytics Dashboard
-A data analytics dashboard built for TikTok Shop creators to track daily performance metrics and evaluate efficiency of content over time.
+A full-stack data analytics dashboard built for TikTok Shop creators to track daily performance metrics over time.
 
-Built with Python, Streamlit, SQLite, Pandas, and Plotly.
+Built with Python, Streamlit, PostgreSQL, Supabase, Pandas, and Plotly.
 
 **[Live Demo](https://tiktok-shop-analytics-dashboard.streamlit.app/)**
 
 ## Features
+- Google user authentication
 - Daily performance logging
 - Editable past entries
-- Persistent SQLite database storage
+- Persistent PostgreSQL database storage
 - Interactive analytics dashboard
 - Date range filtering
 - Metric calculations
@@ -27,28 +28,11 @@ Built with Python, Streamlit, SQLite, Pandas, and Plotly.
 - Average Commission Rate
 - Revenue per Thousand Views (RPM)
 
-## Installation
-```bash
-git clone https://github.com/maximusflo/TikTok-Shop-Analytics-Dashboard.git
-cd TikTok-Shop-Analytics-Dashboard
-```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-## Usage
-Run the application:
-
-```bash
-streamlit run app.py
-```
 
 ## Database Structure
 |Column|Type|
 |---|---|
+|user_id|TEXT|
 |date|TEXT|
 |commission|REAL|
 |gmv|REAL|
@@ -56,9 +40,19 @@ streamlit run app.py
 |videos|INTEGER|
 |views|INTEGER|
 
+Each user's data is associated with their authenticated account.
+
+## Tech Stack
+- **Python** — application logic and data processing
+- **Streamlit** — web application and dashboard
+- **PostgreSQL** — persistent relational database
+- **Supabase** — hosted PostgreSQL database
+- **Pandas** — data manipulation and analysis
+- **Plotly** — interactive data visualization
+- **Google OAuth** — user authentication
+
 ## Future Improvements
 - Performance grading/rank system
-- User authentication
 - Revenue forecasting
 - Video logging
 - Correlation visualizations
@@ -66,8 +60,9 @@ streamlit run app.py
 - Product click metric
 - Attributed GMV metric
 - Commission base metric
+- Row Level Security
 
 ## Author 
-Max Floren  
+**Max Floren**  
 University of St. Thomas  
 Computer Science
