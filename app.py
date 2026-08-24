@@ -9,13 +9,26 @@ from sqlalchemy import text
 
 st.set_page_config(layout='wide')
 
+# Remove increment and decrement buttons from data input
+st.markdown("""
+<style>
+button[aria-label="Decrement"] {
+    display: none;
+}
+
+button[aria-label="Increment"] {
+    display: none;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # user authentication
 if not st.user.is_logged_in:
-    st.title("TikTok Shop Creator Performance Dashboard")
+    st.title('TikTok Shop Creator Performance Dashboard')
     st.divider()
-    st.write("### Get started")
+    st.write('### Get started')
     st.button(
-        "Sign in with Google",
+        'Sign in with Google',
         on_click=st.login
     )
     st.stop()
@@ -32,102 +45,12 @@ st.sidebar.write(f'Logged in as {st.user.name}')
 st.sidebar.write(f'Email: {st.user.email}')
 st.sidebar.button('Log out', on_click=st.logout)
 
-tab1, tab2, tab3 = st.tabs(['Daily Log', 'Analytics', 'Data'])
+tab1, tab2, tab3 = st.tabs(['Analytics', 'Daily Log', 'Data'])
 
 df = utils.load_data(connection, user_id)
 
-# Daily Log tab
-with tab1:
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
-
-    # data input
-    with col1:  # date
-        current_date = st.date_input('Date')
-        st.write(f'Date: {str(current_date)}')
-
-    with col2:  # commission
-        commission = utils.float_input('commission', 'Commission', df, current_date)
-
-    with col3:  # gmv
-        gmv = utils.float_input('gmv', 'GMV', df, current_date)
-
-    with col4:  # items_sold
-        items_sold = utils.integer_input('items_sold', 'Items Sold', df, current_date)
-
-    with col5: # videos posted
-        videos = utils.integer_input('videos', 'Videos Posted', df, current_date)
-
-    with col6:  # views
-        views = utils.integer_input('views', 'Views', df, current_date)
-
-    button_label = 'Save'
-
-    # warns user they are updating an existing entry date
-    warning_box = st.empty()
-    if utils.date_exists(df, current_date):
-        warning_box.info(f'About to update existing entry for {current_date}')
-        button_label = 'Update'
-
-    if st.button(button_label):
-
-        # adding a new entry to data
-        if str(current_date) not in df['date'].astype(str).values:
-
-            with connection.session as session:
-                session.execute(
-                    text('''
-                        INSERT INTO daily_stats
-                        (user_id, date, commission, gmv, items_sold, videos, views)
-                        VALUES (:user_id, :date, :commission, :gmv, :items_sold, :videos, :views)
-                    '''),
-                    {
-                        'user_id': user_id,
-                        'date': str(current_date),
-                        'commission': commission,
-                        'gmv': gmv,
-                        'items_sold': items_sold,
-                        'videos': videos,
-                        'views': views
-                    }
-                )
-                
-                session.commit()
-
-            df = utils.load_data(connection, user_id)
-            st.success(f'Saved entry for {current_date}.')
-
-        # updating existing entry
-        else:
-            with connection.session as session:
-                session.execute(
-                    text('''
-                        UPDATE daily_stats
-                        SET
-                            commission = :commission,
-                            gmv = :gmv,
-                            items_sold = :items_sold,
-                            videos = :videos,
-                            views = :views
-                        WHERE user_id = :user_id AND date = :date
-                    '''),
-                    {
-                        'commission': commission,
-                        'gmv': gmv,
-                        'items_sold': items_sold,
-                        'videos': videos,
-                        'views': views,
-                        'user_id': user_id,
-                        'date': str(current_date)
-                    }
-                )
-                session.commit()
-
-            df = utils.load_data(connection, user_id)
-            warning_box.empty()
-            st.success(f'Updated entry for {current_date}')
-
 # Analytics tab
-with tab2:
+with tab1:
     one, two, three, four, five = st.columns(5)
 
     # filter dates
@@ -321,6 +244,96 @@ with tab2:
     #    items_fig = px.line(filtered_df, x='date', y='videos', title='Daily Videos Posted')
     #    items_fig.update_traces(line=dict(color='orange'))
     #    st.plotly_chart(items_fig, width='stretch')
+
+# Daily Log tab
+with tab2:
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
+
+    # data input
+    with col1:  # date
+        current_date = st.date_input('Date')
+        st.write(f'Date: {str(current_date)}')
+
+    with col2:  # commission
+        commission = utils.float_input('commission', 'Commission', df, current_date)
+
+    with col3:  # gmv
+        gmv = utils.float_input('gmv', 'GMV', df, current_date)
+
+    with col4:  # items_sold
+        items_sold = utils.integer_input('items_sold', 'Items Sold', df, current_date)
+
+    with col5: # videos posted
+        videos = utils.integer_input('videos', 'Videos Posted', df, current_date)
+
+    with col6:  # views
+        views = utils.integer_input('views', 'Views', df, current_date)
+
+    button_label = 'Save'
+
+    # warns user they are updating an existing entry date
+    warning_box = st.empty()
+    if utils.date_exists(df, current_date):
+        warning_box.info(f'About to update existing entry for {current_date}')
+        button_label = 'Update'
+
+    if st.button(button_label):
+
+        # adding a new entry to data
+        if str(current_date) not in df['date'].astype(str).values:
+
+            with connection.session as session:
+                session.execute(
+                    text('''
+                        INSERT INTO daily_stats
+                        (user_id, date, commission, gmv, items_sold, videos, views)
+                        VALUES (:user_id, :date, :commission, :gmv, :items_sold, :videos, :views)
+                    '''),
+                    {
+                        'user_id': user_id,
+                        'date': str(current_date),
+                        'commission': commission,
+                        'gmv': gmv,
+                        'items_sold': items_sold,
+                        'videos': videos,
+                        'views': views
+                    }
+                )
+                
+                session.commit()
+
+            df = utils.load_data(connection, user_id)
+            st.success(f'Saved entry for {current_date}.')
+
+        # updating existing entry
+        else:
+            with connection.session as session:
+                session.execute(
+                    text('''
+                        UPDATE daily_stats
+                        SET
+                            commission = :commission,
+                            gmv = :gmv,
+                            items_sold = :items_sold,
+                            videos = :videos,
+                            views = :views
+                        WHERE user_id = :user_id AND date = :date
+                    '''),
+                    {
+                        'commission': commission,
+                        'gmv': gmv,
+                        'items_sold': items_sold,
+                        'videos': videos,
+                        'views': views,
+                        'user_id': user_id,
+                        'date': str(current_date)
+                    }
+                )
+                session.commit()
+
+            df = utils.load_data(connection, user_id)
+            warning_box.empty()
+            st.success(f'Updated entry for {current_date}')
 
 # Data tab
 with tab3:
