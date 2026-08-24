@@ -19,18 +19,41 @@ button[aria-label="Decrement"] {
 button[aria-label="Increment"] {
     display: none;
 }
+
+button {
+    white-space: nowrap;
+}
 </style>
 """, unsafe_allow_html=True)
 
 # user authentication
 if not st.user.is_logged_in:
     st.title('TikTok Shop Creator Performance Dashboard')
+    st.write('#### Track your TikTok Shop performance data.')
     st.divider()
-    st.write('### Get started')
     st.button(
-        'Sign in with Google',
-        on_click=st.login
-    )
+            'Sign in with Google',
+            on_click=st.login,
+        )
+
+    st.markdown("""
+    <style>
+    .footer {
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: gray;
+        font-size: 14px;
+    }
+    </style>
+
+    <div class="footer">
+        Built with Python · Streamlit · PostgreSQL · Pandas · Plotly
+    </div>
+    """, unsafe_allow_html=True)
+
     st.stop()
 
 user_id = st.user.email
@@ -51,47 +74,70 @@ df = utils.load_data(connection, user_id)
 
 # Analytics tab
 with tab1:
-    one, two, three, four, five = st.columns(5)
+    one, two, three, four, five = st.columns([1.6, 2.1, 1.7, 1.9, 19])
 
-    # filter dates
+    # filter dates button
     single_day = False
+    with five:
+        with st.popover('Filter Dates'):
+            df['date'] = pd.to_datetime(df['date']).dt.date
+        
+            if not df.empty:
+                min_date = df['date'].min()
+                max_date = df['date'].max()
+                date_range = st.date_input('Date Range', value=(min_date, max_date))
+            else:
+                today = datetime.date.today()
+                date_range = st.date_input('Date Range', value=(today, today))
+        
+            if isinstance(date_range, tuple) and len(date_range) == 2:
+                start_date = date_range[0]
+                end_date = date_range[1]
+            else:
+                start_date = date_range[0]
+                end_date = date_range[0]
+
+    # today button
     with one:
-        df['date'] = pd.to_datetime(df['date']).dt.date
-
-        if not df.empty:
-            min_date = df['date'].min()
-            max_date = df['date'].max()
-            date_range = st.date_input('Date Range', value=(min_date, max_date), key='date_range')
-        else:
+        if st.button('Today', use_container_width=True):
             today = datetime.date.today()
-            date_range = st.date_input('Date Range', value=(today, today), key='date_range')
-
-        if isinstance(date_range, tuple) and len(date_range) == 2:
-            start_date = date_range[0]
-            end_date = date_range[1]
-        else:
+            date_range = (today, today)
             start_date = date_range[0]
             end_date = date_range[0]
-    
-    with two:
-        column1, column2, column3 = st.columns(3)
-        with column1:
-            if st.button('Today', use_container_width=True):
-                today = datetime.date.today()
-                date_range = (today, today)
-                start_date = date_range[0]
-                end_date = date_range[0]
-        with column2:
-            if st.button('Yesterday', use_container_width=True):
-                yesterday = datetime.date.today() - datetime.timedelta(days=1)
-                date_range = (yesterday, yesterday)
-                start_date = date_range[0]
-                end_date = date_range[0]
 
-    filtered_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)] if not df.empty else pd.DataFrame(columns=df.columns)
+    # yesterday button
+    with two:
+        if st.button('Yesterday', use_container_width=True):
+            yesterday = datetime.date.today() - datetime.timedelta(days=1)
+            date_range = (yesterday, yesterday)
+            start_date = date_range[0]
+            end_date = date_range[0]
+
+    # 7 days button
+    with three:
+        if st.button('7 Days', use_container_width=True):
+            today = datetime.date.today()
+            week_ago = today - datetime.timedelta(days=6)
+            date_range = (week_ago, today)
+            start_date = date_range[0]
+            end_date = date_range[1]
+
+    # 30 days button
+    with four:
+        if st.button('30 Days', use_container_width=True):
+            today = datetime.date.today()
+            month_ago = today - datetime.timedelta(days=29)
+            date_range = (month_ago, today)
+            start_date = date_range[0]
+            end_date = date_range[1]
 
     if start_date == end_date:
-            single_day = True
+        single_day = True
+        st.write(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')}**")
+    else:
+        st.write(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')} - {end_date.strftime('%b %d, %Y').replace(' 0', ' ')}**")
+
+    filtered_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)] if not df.empty else pd.DataFrame(columns=df.columns)
     
     col1, col2, col3, col4, col5 = st.columns(5)
 
@@ -247,29 +293,32 @@ with tab1:
 
 # Daily Log tab
 with tab2:
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    left, right = st.columns([1.75, 1])
 
     # data input
-    with col1:  # date
-        current_date = st.date_input('Date')
-        st.write(f'Date: {str(current_date)}')
+    with left:
+        col1, col2, col3, col4, col5, col6 = st.columns([1.3, 1.4, 1, 1.1, 1.2, 1])
 
-    with col2:  # commission
-        commission = utils.float_input('commission', 'Commission', df, current_date)
+        with col1:  # date
+            current_date = st.date_input('Date')
+            st.write(f'Date: {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}')
 
-    with col3:  # gmv
-        gmv = utils.float_input('gmv', 'GMV', df, current_date)
+        with col2:  # commission
+            commission = utils.float_input('commission', 'Commission', df, current_date)
 
-    with col4:  # items_sold
-        items_sold = utils.integer_input('items_sold', 'Items Sold', df, current_date)
+        with col3:  # gmv
+            gmv = utils.float_input('gmv', 'GMV', df, current_date)
 
-    with col5: # videos posted
-        videos = utils.integer_input('videos', 'Videos Posted', df, current_date)
+        with col4:  # items_sold
+            items_sold = utils.integer_input('items_sold', 'Items Sold', df, current_date)
 
-    with col6:  # views
-        views = utils.integer_input('views', 'Views', df, current_date)
+        with col5: # videos posted
+            videos = utils.integer_input('videos', 'Videos Posted', df, current_date)
 
-    button_label = 'Save'
+        with col6:  # views
+            views = utils.integer_input('views', 'Views', df, current_date)
+
+        button_label = 'Save'
 
     # warns user they are updating an existing entry date
     warning_box = st.empty()
