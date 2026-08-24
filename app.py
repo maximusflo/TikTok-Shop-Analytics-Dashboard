@@ -300,7 +300,7 @@ with tab2:
         col1, col2, col3, col4, col5, col6 = st.columns([1.3, 1.4, 1, 1.1, 1.2, 1])
 
         with col1:  # date
-            current_date = st.date_input('Date', value='today')
+            current_date = st.date_input('Date', value=today)
             st.write(f"Date: {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}")
 
         with col2:  # commission
