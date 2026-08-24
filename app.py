@@ -133,9 +133,9 @@ with tab1:
 
     if start_date == end_date:
         single_day = True
-        st.write(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')}**")
+        st.write(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')}** (CDT)")
     else:
-        st.write(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')} - {end_date.strftime('%b %d, %Y').replace(' 0', ' ')}**")
+        st.write(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')} - {end_date.strftime('%b %d, %Y').replace(' 0', ' ')}** (CDT)")
 
     filtered_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)] if not df.empty else pd.DataFrame(columns=df.columns)
     
