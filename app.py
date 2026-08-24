@@ -6,8 +6,11 @@ import metrics
 import utils
 import database
 from sqlalchemy import text
+from zoneinfo import ZoneInfo
 
 st.set_page_config(layout='wide')
+
+today = datetime.datetime.now(ZoneInfo("America/Chicago")).date()
 
 # Remove increment and decrement buttons from data input
 st.markdown("""
@@ -87,7 +90,7 @@ with tab1:
                 max_date = df['date'].max()
                 date_range = st.date_input('Date Range', value=(min_date, max_date))
             else:
-                today = datetime.date.today()
+                today = datetime.datetime.now(ZoneInfo("America/Chicago")).date()
                 date_range = st.date_input('Date Range', value=(today, today))
         
             if isinstance(date_range, tuple) and len(date_range) == 2:
@@ -100,7 +103,6 @@ with tab1:
     # today button
     with one:
         if st.button('Today', use_container_width=True):
-            today = datetime.date.today()
             date_range = (today, today)
             start_date = date_range[0]
             end_date = date_range[0]
@@ -108,7 +110,7 @@ with tab1:
     # yesterday button
     with two:
         if st.button('Yesterday', use_container_width=True):
-            yesterday = datetime.date.today() - datetime.timedelta(days=1)
+            yesterday = today - datetime.timedelta(days=1)
             date_range = (yesterday, yesterday)
             start_date = date_range[0]
             end_date = date_range[0]
@@ -116,7 +118,6 @@ with tab1:
     # 7 days button
     with three:
         if st.button('7 Days', use_container_width=True):
-            today = datetime.date.today()
             week_ago = today - datetime.timedelta(days=6)
             date_range = (week_ago, today)
             start_date = date_range[0]
@@ -125,7 +126,6 @@ with tab1:
     # 30 days button
     with four:
         if st.button('30 Days', use_container_width=True):
-            today = datetime.date.today()
             month_ago = today - datetime.timedelta(days=29)
             date_range = (month_ago, today)
             start_date = date_range[0]
