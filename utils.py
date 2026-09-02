@@ -87,12 +87,14 @@ def integer_input(column, label, df, date):
 import calendar
 import datetime
 
-def days_left_in_month(today):
+def days_left_in_month(month, today):
     '''
     Calculates and returns the days remaining
     in the current month.
     '''
     _, total_days = calendar.monthrange(today.year, today.month)
+
+    if month.year == today.year and month.month == today.month:
+        return total_days - today.day
     
-    remaining_days = total_days - today.day
-    return remaining_days
+    return total_days
