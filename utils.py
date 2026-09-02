@@ -1,5 +1,7 @@
 import pandas as pd
 import streamlit as st
+import datetime as dt
+import calendar
 
 def sort_df_by_date(df):
     ''' 
@@ -81,3 +83,18 @@ def integer_input(column, label, df, date):
     value = int(st.number_input(label, value=default, key=f'{column}_{date}'))
     st.write(f'{label}: {value:,}')
     return value
+
+import calendar
+import datetime
+
+def days_left_in_month():
+    '''
+    Calculates and returns the days remaining
+    in the current month.
+    '''
+    today = datetime.date.today()
+
+    _, total_days = calendar.monthrange(today.year, today.month)
+    
+    remaining_days = total_days - today.day
+    return remaining_days
