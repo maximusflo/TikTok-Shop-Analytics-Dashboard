@@ -31,7 +31,7 @@ button {
 
 # user authentication
 if not st.user.is_logged_in:
-    st.title('TikTok Shop Creator Performance Dashboard')
+    st.title('TikTok Shop Creator Performance Dashboard', anchor=False)
     st.write('#### Track your TikTok Shop performance data.')
     st.divider()
     st.button(
@@ -64,14 +64,14 @@ user_id = st.user.email
 # initialize database
 connection = database.get_connection()
 
-st.title("TikTok Shop Creator Performance Tracker")
+st.title("TikTok Shop Creator Performance Tracker", anchor=False)
 
 # side bar
 st.sidebar.write(f'Logged in as {st.user.name}')
 st.sidebar.write(f'Email: {st.user.email}')
 st.sidebar.button('Log out', on_click=st.logout)
 
-tab1, tab2, tab3 = st.tabs(['Analytics', 'Daily Log', 'Data'])
+tab1, tab2, tab3, tab4 = st.tabs(['Analytics', 'Daily Log', 'Goals', 'Data'])
 
 df = utils.load_data(connection, user_id)
 
@@ -321,10 +321,11 @@ with tab2:
         button_label = 'Save'
 
     # warns user they are updating an existing entry date
-    warning_box = st.empty()
-    if utils.date_exists(df, current_date):
-        warning_box.info(f'About to update existing entry for {current_date}')
-        button_label = 'Update'
+    with left:
+        warning_box = st.empty()
+        if utils.date_exists(df, current_date):
+            warning_box.info(f'About to update existing entry for {current_date}')
+            button_label = 'Update'
 
     if st.button(button_label):
 
@@ -384,9 +385,84 @@ with tab2:
             warning_box.empty()
             st.success(f'Updated entry for {current_date}')
 
-# Data tab
+# Goals tab
 with tab3:
-    st.title('All Data')
+    with st.popover('Goal options'):
+        months = []
+        analytics = ['Commission', 'GMV']
+
+        for i in range(2):
+            month_date = today.replace(day=1) + datetime.timedelta(days=32 * i)
+            month_date = month_date.replace(day=1)
+            months.append(month_date)
+
+        selected_month = st.selectbox('Month', months, format_func=lambda x: x.strftime('%B'))
+        selected_analytic = st.selectbox('Analytic', analytics)
+        goal_amount = st.number_input('Amount', min_value=0, step=100, format='%d')
+
+        if st.button('Save Goal'):
+            database.save_goal(
+                connection,
+                user_id,
+                selected_month,
+                selected_analytic,
+                goal_amount
+            )
+            st.rerun()
+
+    goal = database.load_goal(
+        connection,
+        user_id,
+        selected_month,
+        selected_analytic,
+    )
+
+    temp_date = pd.to_datetime(df['date'])
+
+    analytic_type = selected_analytic.lower()
+
+    current_value = df[(temp_date.dt.year == selected_month.year) & (temp_date.dt.month == selected_month.month)][analytic_type].sum()
+
+    if goal is not None and goal != 0:
+        progress = min(current_value / goal, 1.0)
+        remaining = max(goal - current_value, 0)
+    else: 
+        progress = 0
+        remaining = 0
+
+    if goal is not None and goal != 0:
+        st.markdown(f"## {selected_month.strftime('%B')} {selected_analytic} Goal", anchors=False)
+        st.progress(progress)
+        
+        colm1, colm2, colm3 = st.columns(3)
+        
+        with colm1:
+            st.metric('Current', f'${current_value:,.0f}')
+        
+        with colm2:
+            st.metric('Goal', f'${goal:,.0f}')
+                
+        with colm3:
+            st.metric('Remaining', f'${remaining:,.0f}')
+
+        days_left = utils.days_left_in_month(selected_month, today)
+        if days_left > 0:
+            remaining_per_day = remaining / days_left
+        else:
+            remaining_per_day = remaining
+
+        if progress == 1.0:
+            st.markdown(f"##### {selected_month.strftime('%B')} goal completed, nice work.")
+        else:
+            st.markdown(f"##### ${remaining_per_day:,.2f} {selected_analytic} required per day to complete {selected_month.strftime('%B')} goal.", anchors=False)
+    else:
+        st.markdown('#### No current goal.', anchors=False)
+
+    #st.markdown(f"## **\\${current_value:,.0f} / \\${goal:,.0f}**", anchors=False)
+
+# Data tab
+with tab4:
+    st.title('All Data', anchor=False)
 
     left1, right1 = st.columns(2)
     
