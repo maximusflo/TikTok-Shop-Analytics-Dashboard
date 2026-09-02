@@ -432,7 +432,13 @@ with tab3:
 
     if goal is not None and goal != 0:
         st.markdown(f"## {selected_month.strftime('%B')} {selected_analytic} Goal", anchors=False)
-        st.progress(progress)
+
+        lside, rside = st.columns([9, 1])
+        with lside:
+            st.progress(progress)
+        with rside:
+                st.markdown(f'## {(progress*100):.1f}%')
+
         
         colm1, colm2, colm3 = st.columns(3)
         
