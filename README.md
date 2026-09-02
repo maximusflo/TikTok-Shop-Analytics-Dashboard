@@ -16,6 +16,7 @@ Built with Python, Streamlit, PostgreSQL, Supabase, Pandas, and Plotly.
 - Commission rate analysis
 - Conversion rate analysis
 - RPM analysis
+- Monthly goal setting and tracking
 - Visualizations
 
 ## Metrics Tracked
@@ -30,17 +31,26 @@ Built with Python, Streamlit, PostgreSQL, Supabase, Pandas, and Plotly.
 
 
 ## Database Structure
+`daily_stats`
 |Column|Type|
 |---|---|
 |user_id|TEXT|
-|date|TEXT|
+|date|DATE|
 |commission|REAL|
 |gmv|REAL|
 |items_sold|INTEGER|
 |videos|INTEGER|
 |views|INTEGER|
 
-Each user's data is associated with their authenticated account.
+---  
+
+`monthly_goals`
+|Column|Type|
+|---|---|
+|user_id|TEXT|
+|month|DATE|
+|analytic|TEXT|
+|goal|NUMERIC|
 
 ## Tech Stack
 - **Python** — application logic and data processing
@@ -56,7 +66,6 @@ Each user's data is associated with their authenticated account.
 - Revenue forecasting
 - Video logging
 - Correlation visualizations
-- Goal tracking
 - Product click metric
 - Attributed GMV metric
 - Commission base metric
