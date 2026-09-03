@@ -8,9 +8,9 @@ import database
 from sqlalchemy import text
 from zoneinfo import ZoneInfo
 
-st.set_page_config(layout='wide')
+st.set_page_config(page_title='Creator Analytics', page_icon='images/logo.png', layout='wide')
 
-today = datetime.datetime.now(ZoneInfo("America/Chicago")).date()
+today = datetime.datetime.now(ZoneInfo('America/Chicago')).date()
 
 # Remove increment and decrement buttons from data input
 st.markdown("""
