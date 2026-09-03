@@ -269,6 +269,9 @@ with tab1:
 
             st.metric('RPM', f'${rpm} - {quality}')
 
+    # performance estimate
+    st.markdown(f'###### This is a performance estimate.')
+
     # commission line chart
     commission_fig = px.line(filtered_df, x='date', y='commission', title='Daily Commission')
     commission_fig.update_traces(line=dict(color='springgreen'))
@@ -433,23 +436,23 @@ with tab3:
     if goal is not None and goal != 0:
         st.markdown(f"## {selected_month.strftime('%B')} {selected_analytic} Goal", anchors=False)
 
-        lside, rside = st.columns([9, 1])
+        lside, rside = st.columns([8.5, 1.5])
         with lside:
             st.progress(progress)
         with rside:
-                st.markdown(f'## {(progress*100):.1f}%')
+                st.markdown(f'### {(progress*100):.1f}%', anchors=False)
 
         
         colm1, colm2, colm3 = st.columns(3)
         
         with colm1:
-            st.metric('Current', f'${current_value:,.0f}')
+            st.metric('Current', f'${current_value:,.2f}')
         
         with colm2:
             st.metric('Goal', f'${goal:,.0f}')
                 
         with colm3:
-            st.metric('Remaining', f'${remaining:,.0f}')
+            st.metric('Remaining', f'${remaining:,.2f}')
 
         days_left = utils.days_left_in_month(selected_month, today)
         if days_left > 0:
@@ -457,10 +460,12 @@ with tab3:
         else:
             remaining_per_day = remaining
 
-        if progress == 1.0:
-            st.markdown(f"##### {selected_month.strftime('%B')} goal completed, nice work.")
+        if remaining_per_day < 0.01:
+            st.markdown(f"##### Less than $0.01 required per day to complete goal.", anchors=False)
+        elif progress == 1.0:
+            st.markdown(f"##### {selected_month.strftime('%B')} {selected_analytic} goal completed, nice work.")
         else:
-            st.markdown(f"##### ${remaining_per_day:,.2f} {selected_analytic} required per day to complete {selected_month.strftime('%B')} goal.", anchors=False)
+            st.markdown(f"##### ${remaining_per_day:,.2f} required per day to complete goal.", anchors=False)
     else:
         st.markdown('#### No current goal.', anchors=False)
 
