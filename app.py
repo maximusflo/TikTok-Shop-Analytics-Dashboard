@@ -269,9 +269,6 @@ with tab1:
 
             st.metric('RPM', f'${rpm} - {quality}')
 
-    # performance estimate
-    st.markdown(f'###### This is a performance estimate.')
-
     # commission line chart
     commission_fig = px.line(filtered_df, x='date', y='commission', title='Daily Commission')
     commission_fig.update_traces(line=dict(color='springgreen'))
