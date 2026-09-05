@@ -9,6 +9,7 @@ Built with Python, Streamlit, PostgreSQL, Supabase, Pandas, and Plotly.
 - Google user authentication
 - Daily performance logging
 - Editable past entries
+- Demo mode with fictional data
 - Persistent PostgreSQL database storage
 - Interactive analytics dashboard
 - Date range filtering
@@ -70,7 +71,6 @@ Built with Python, Streamlit, PostgreSQL, Supabase, Pandas, and Plotly.
 - Attributed GMV metric
 - Commission base metric
 - Row Level Security
-- Demo mode
 
 ## Author 
 **Max Floren**  
