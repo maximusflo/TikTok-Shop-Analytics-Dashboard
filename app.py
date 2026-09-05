@@ -469,12 +469,17 @@ with tab3:
         else:
             remaining_per_day = remaining
 
+        days_passed = datetime.date.today().day
+        monthly_predict = (current_value / days_passed) * (days_left + days_passed)
+
         if remaining_per_day < 0.01:
             st.markdown(f"##### Less than $0.01 required per day to complete goal.", anchors=False)
+            st.markdown(f'##### On track to make ${monthly_predict} {selected_analytic} for {selected_month.strftime('%B')}.', anchors=False)
         elif progress == 1.0:
             st.markdown(f"##### {selected_month.strftime('%B')} {selected_analytic} goal completed, nice work.")
         else:
             st.markdown(f"##### ${remaining_per_day:,.2f} required per day to complete goal.", anchors=False)
+            st.markdown(f'##### On track to make ${monthly_predict} {selected_analytic} for {selected_month.strftime('%B')}.', anchors=False)
     else:
         st.markdown('#### No current goal.', anchors=False)
 
