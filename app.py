@@ -12,6 +12,8 @@ st.set_page_config(page_title='Creator Analytics', page_icon='images/logo.png', 
 
 today = datetime.datetime.now(ZoneInfo('America/Chicago')).date()
 
+DEMO_USER_ID = 'demo-user'
+
 # Remove increment and decrement buttons from data input
 st.markdown("""
 <style>
@@ -30,14 +32,16 @@ button {
 """, unsafe_allow_html=True)
 
 # user authentication
-if not st.user.is_logged_in:
+if not st.user.is_logged_in and not st.session_state.get('demo_mode', False):
     st.title('TikTok Shop Creator Performance Dashboard', anchor=False)
-    st.write('#### Track your TikTok Shop performance data.')
+    st.markdown('#### Track your TikTok Shop performance data.', anchors=False)
     st.divider()
-    st.button(
-            'Sign in with Google',
-            on_click=st.login,
-        )
+
+    if st.button('Sign in with Google'):
+        st.login()
+    if st.button('Try Demo'):
+        st.session_state.demo_mode = True
+        st.rerun()
 
     st.markdown("""
     <style>
@@ -59,17 +63,25 @@ if not st.user.is_logged_in:
 
     st.stop()
 
-user_id = st.user.email
+if st.session_state.get('demo_mode', False):
+    user_id = DEMO_USER_ID
+else:
+    user_id = st.user.email
 
 # initialize database
 connection = database.get_connection()
 
-st.title("TikTok Shop Creator Performance Tracker", anchor=False)
-
 # side bar
-st.sidebar.write(f'Logged in as {st.user.name}')
-st.sidebar.write(f'Email: {st.user.email}')
-st.sidebar.button('Log out', on_click=st.logout)
+if not st.session_state.get('demo_mode', False):
+    st.sidebar.write(f'Logged in as {st.user.name}')
+    st.sidebar.write(f'Email: {st.user.email}')
+    st.sidebar.button('Log out', on_click=st.logout)
+else:
+    st.title('TikTok Shop Creator Performance Tracker - DEMO MODE', anchor=False)
+    st.info('*All data shown is fictional and for demonstration purposes only.*')
+
+    st.sidebar.write(f'Logged in as demo user')
+    st.sidebar.button('Exit Demo', on_click=st.logout)
 
 tab1, tab2, tab3, tab4 = st.tabs(['Analytics', 'Daily Log', 'Goals', 'Data'])
 
