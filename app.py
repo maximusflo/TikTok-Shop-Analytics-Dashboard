@@ -119,7 +119,7 @@ with tab1:
             st.session_state.end_date = selected_end
             st.rerun()
 
-    selected_filter = st.pills(label='Filter', label_visibility='collapsed', options=['Today', 'Yesterday', '7 Days', '30 Days', 'Custom'], default='Today',  key='date_filter')
+    selected_filter = st.pills(label='Filter', label_visibility='collapsed', options=['Today', 'Yesterday', '7 Day', '30 Day', 'Custom'], default='Today',  key='date_filter')
 
     # today button
     if selected_filter == 'Today':
@@ -132,12 +132,12 @@ with tab1:
         end_date = start_date
 
     # 7 days button
-    elif selected_filter == '7 Days':
+    elif selected_filter == '7 Day':
         start_date = today - datetime.timedelta(days=6)
         end_date = today
 
     # 30 days button
-    elif selected_filter == '30 Days':
+    elif selected_filter == '30 Day':
         start_date = today - datetime.timedelta(days=29)
         end_date = today
 
