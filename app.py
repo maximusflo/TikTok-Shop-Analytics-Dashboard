@@ -89,59 +89,69 @@ df = utils.load_data(connection, user_id)
 
 # Analytics tab
 with tab1:
-    one, two, three, four, five = st.columns([1.6, 2.1, 1.7, 1.9, 19])
 
     # filter dates button
     single_day = False
-    with five:
-        with st.popover('Filter Dates'):
-            df['date'] = pd.to_datetime(df['date']).dt.date
-        
-            if not df.empty:
-                min_date = df['date'].min()
-                max_date = df['date'].max()
-                date_range = st.date_input('Date Range', value=(min_date, max_date))
-            else:
-                today = datetime.datetime.now(ZoneInfo("America/Chicago")).date()
-                date_range = st.date_input('Date Range', value=(today, today))
-        
-            if isinstance(date_range, tuple) and len(date_range) == 2:
-                start_date = date_range[0]
-                end_date = date_range[1]
-            else:
-                start_date = date_range[0]
-                end_date = date_range[0]
+
+    df['date'] = pd.to_datetime(df['date']).dt.date
+
+    start_date = df['date'].min()
+    end_date = df['date'].max()
+
+    @st.dialog('Select Date Range')
+    def date_picker():
+        if not df.empty:
+            min_date = df['date'].min()
+            max_date = df['date'].max()
+            date_range = st.date_input('Date Range', value=(st.session_state.start_date, st.session_state.end_date))
+        else:
+            today = datetime.datetime.now(ZoneInfo("America/Chicago")).date()
+            date_range = st.date_input('Date Range', value=(today, today))
+            
+        if isinstance(date_range, tuple) and len(date_range) == 2:
+            selected_start = date_range[0]
+            selected_end = date_range[1]
+        else:
+            selected_start = date_range
+            selected_end = date_range
+
+        if st.button('Apply'):
+            st.session_state.start_date = selected_start
+            st.session_state.end_date = selected_end
+            st.rerun()
+
+    selected_filter = st.pills(label='Filter', label_visibility='collapsed', options=['Today', 'Yesterday', '7 Days', '30 Days', 'Custom'], default='Today',  key='date_filter')
 
     # today button
-    with one:
-        if st.button('Today', use_container_width=True):
-            date_range = (today, today)
-            start_date = date_range[0]
-            end_date = date_range[0]
+    if selected_filter == 'Today':
+        start_date = today
+        end_date = today
 
     # yesterday button
-    with two:
-        if st.button('Yesterday', use_container_width=True):
-            yesterday = today - datetime.timedelta(days=1)
-            date_range = (yesterday, yesterday)
-            start_date = date_range[0]
-            end_date = date_range[0]
+    elif selected_filter == 'Yesterday':
+        start_date = today - datetime.timedelta(days=1)
+        end_date = start_date
 
     # 7 days button
-    with three:
-        if st.button('7 Days', use_container_width=True):
-            week_ago = today - datetime.timedelta(days=6)
-            date_range = (week_ago, today)
-            start_date = date_range[0]
-            end_date = date_range[1]
+    elif selected_filter == '7 Days':
+        start_date = today - datetime.timedelta(days=6)
+        end_date = today
 
     # 30 days button
-    with four:
-        if st.button('30 Days', use_container_width=True):
-            month_ago = today - datetime.timedelta(days=29)
-            date_range = (month_ago, today)
-            start_date = date_range[0]
-            end_date = date_range[1]
+    elif selected_filter == '30 Days':
+        start_date = today - datetime.timedelta(days=29)
+        end_date = today
+
+    # custom button
+    elif selected_filter == 'Custom':
+        if 'start_date' not in st.session_state:
+            st.session_state.start_date = df['date'].min()
+            st.session_state.end_date = df['date'].max()
+
+        start_date = st.session_state.start_date
+        end_date = st.session_state.end_date
+
+        date_picker()
 
     if start_date == end_date:
         single_day = True
@@ -473,13 +483,13 @@ with tab3:
         monthly_predict = (current_value / days_passed) * (days_left + days_passed)
 
         if remaining_per_day < 0.01:
+            st.markdown(f'##### Projected: ${monthly_predict:.2f}', anchors=False)
             st.markdown(f"##### Less than $0.01 required per day to complete goal.", anchors=False)
-            st.markdown(f'##### On track to make ${monthly_predict} {selected_analytic} for {selected_month.strftime('%B')}.', anchors=False)
         elif progress == 1.0:
             st.markdown(f"##### {selected_month.strftime('%B')} {selected_analytic} goal completed, nice work.")
         else:
+            st.markdown(f'##### Projected: ${monthly_predict:,.2f}', anchors=False)
             st.markdown(f"##### ${remaining_per_day:,.2f} required per day to complete goal.", anchors=False)
-            st.markdown(f'##### On track to make ${monthly_predict} {selected_analytic} for {selected_month.strftime('%B')}.', anchors=False)
     else:
         st.markdown('#### No current goal.', anchors=False)
 
