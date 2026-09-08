@@ -296,13 +296,14 @@ with tab1:
         # commission line chart
         commission_fig = px.line(filtered_df, x='date', y='commission', title='Daily Commission')
         commission_fig.update_traces(line=dict(color='springgreen'))
-        commission_fig.update_layout(yaxis=(dict(tickprefix='$')))
-        st.plotly_chart(commission_fig, width='stretch', config={'displayModeBar': False, 'staticPlot': True})
+        commission_fig.update_layout(xaxis=dict(fixedrange=True), yaxis=(dict(tickprefix='$', fixedrange=True)), dragmode=False)
+        st.plotly_chart(commission_fig, width='stretch', config={'displayModeBar': False, 'staticPlot': False})
     
         # views line chart
         views_fig = px.line(filtered_df, x='date', y='views', title='Daily Views')
         views_fig.update_traces(line=dict(color='royalblue'))
-        st.plotly_chart(views_fig, width='stretch', config={'displayModeBar': False, 'staticPlot': True})
+        views_fig.update_layout(xaxis=dict(fixedrange=True), yaxis=(dict(fixedrange=True)), dragmode=False)
+        st.plotly_chart(views_fig, width='stretch', config={'displayModeBar': False, 'staticPlot': False})
 
     # GMV line chart
     #    gmv_fig = px.line(filtered_df, x='date', y='gmv', title='Daily GMV')
