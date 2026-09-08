@@ -467,10 +467,10 @@ with tab3:
         colm1, colm2, colm3, colm4 = st.columns(4)
         
         with colm1:
-            st.metric('Current', f'${current_value:,.2f}')
+            st.metric('Goal', f'${goal:,.0f}')
         
         with colm2:
-            st.metric('Goal', f'${goal:,.0f}')
+            st.metric('Current', f'${current_value:,.2f}')
                 
         with colm3:
             st.metric('Remaining', f'${remaining:,.2f}')
