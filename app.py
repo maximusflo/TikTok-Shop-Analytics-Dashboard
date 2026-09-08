@@ -76,7 +76,7 @@ if not st.session_state.get('demo_mode', False):
     st.sidebar.write(f'Email: {st.user.email}')
     st.sidebar.button('Log out', on_click=st.logout)
 else:
-    st.title('TikTok Shop Creator Performance Tracker - DEMO MODE', anchor=False)
+    st.title('Creator Analytics Dashboard - DEMO MODE', anchor=False)
     st.info('*All data shown is fictional and for demonstration purposes only.*')
 
     st.sidebar.write(f'Logged in as demo user')
