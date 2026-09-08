@@ -461,7 +461,7 @@ with tab3:
         with lside:
             st.progress(progress)
         with rside:
-                st.markdown(f'### {(progress*100):.1f}%', anchors=False)
+            st.markdown(f'### {(progress*100):.0f}%', anchors=False)
 
         
         goal_contain = st.container(horizontal=True)
