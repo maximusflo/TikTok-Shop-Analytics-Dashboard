@@ -462,7 +462,7 @@ with tab3:
                 st.markdown(f'### {(progress*100):.1f}%', anchors=False)
 
         
-        colm1, colm2, colm3 = st.columns(3)
+        colm1, colm2, colm3, colm4 = st.columns(4)
         
         with colm1:
             st.metric('Current', f'${current_value:,.2f}')
@@ -482,13 +482,14 @@ with tab3:
         days_passed = datetime.date.today().day
         monthly_predict = (current_value / days_passed) * (days_left + days_passed)
 
+        with colm4:
+            st.metric('Projected', f'${monthly_predict:,.2f}')
+
         if remaining_per_day < 0.01:
-            st.markdown(f'##### Projected: ${monthly_predict:.2f}', anchors=False)
             st.markdown(f"##### Less than $0.01 required per day to complete goal.", anchors=False)
         elif progress == 1.0:
             st.markdown(f"##### {selected_month.strftime('%B')} {selected_analytic} goal completed, nice work.")
         else:
-            st.markdown(f'##### Projected: ${monthly_predict:,.2f}', anchors=False)
             st.markdown(f"##### ${remaining_per_day:,.2f} required per day to complete goal.", anchors=False)
     else:
         st.markdown('#### No current goal.', anchors=False)
