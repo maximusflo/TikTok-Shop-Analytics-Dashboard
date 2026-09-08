@@ -464,16 +464,11 @@ with tab3:
                 st.markdown(f'### {(progress*100):.1f}%', anchors=False)
 
         
-        colm1, colm2, colm3, colm4 = st.columns(4)
+        goal_contain = st.container(horizontal=True)
         
-        with colm1:
-            st.metric('Goal', f'${goal:,.0f}')
-        
-        with colm2:
-            st.metric('Current', f'${current_value:,.2f}')
-                
-        with colm3:
-            st.metric('Remaining', f'${remaining:,.2f}')
+        goal_contain.metric('Goal', f'${goal:,.0f}')
+        goal_contain.metric('Current', f'${current_value:,.2f}')
+        goal_contain.metric('Remaining', f'${remaining:,.2f}')
 
         days_left = utils.days_left_in_month(selected_month, today)
         if days_left > 0:
@@ -484,8 +479,7 @@ with tab3:
         days_passed = datetime.date.today().day
         monthly_predict = (current_value / days_passed) * (days_left + days_passed)
 
-        with colm4:
-            st.metric('Projected', f'${monthly_predict:,.2f}')
+        goal_contain.metric('Projected', f'${monthly_predict:,.2f}')
 
         if remaining_per_day < 0.01:
             st.markdown(f"##### Less than $0.01 required per day to complete goal.", anchors=False)
