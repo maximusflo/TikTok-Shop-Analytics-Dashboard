@@ -33,13 +33,15 @@ button {
 
 # user authentication
 if not st.user.is_logged_in and not st.session_state.get('demo_mode', False):
-    st.title('TikTok Shop Creator Performance Dashboard', anchor=False)
-    st.markdown('#### Track your TikTok Shop performance data.', anchors=False)
+    st.title('Creator Analytics Dashboard', anchor=False)
+    st.markdown('##### Track and analyze your affiliate performance data.', anchors=False)
     st.divider()
 
-    if st.button('Sign in with Google'):
+    flex = st.container(horizontal=True)
+
+    if flex.button('Sign in with Google'):
         st.login()
-    if st.button('Try Demo'):
+    if flex.button('Try Demo'):
         st.session_state.demo_mode = True
         st.rerun()
 
@@ -56,9 +58,6 @@ if not st.user.is_logged_in and not st.session_state.get('demo_mode', False):
     }
     </style>
 
-    <div class="footer">
-        Built with Python · Streamlit · PostgreSQL · Pandas · Plotly
-    </div>
     """, unsafe_allow_html=True)
 
     st.stop()
