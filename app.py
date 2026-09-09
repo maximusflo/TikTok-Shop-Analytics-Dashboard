@@ -206,9 +206,9 @@ with tab1:
                 st.metric('Avg. Daily Commission', '$0')
         else:
             st.metric('Total Commission', f"${current_commission:,.2f}", delta=f'{commission_delta:.2f}%' if commission_delta is not None else None, 
-                      delta_color='grey' if commission_delta == 0 else 'normal')
+                      delta_color='grey' if commission_delta == 0 else 'normal', border=True)
             if not single_day:
-                st.metric('Avg. Daily Commission', f"${filtered_df['commission'].mean():,.2f}")
+                st.metric('Avg. Daily Commission', f"${filtered_df['commission'].mean():,.2f}", border=True)
 
     with col2:  # GMV
         if comparison_df.empty:
@@ -224,9 +224,9 @@ with tab1:
                 st.metric('Avg. Daily GMV', '$0')
         else:
             st.metric('Total GMV', f"${current_gmv:,.2f}", delta=f'{gmv_delta:.2f}%' if gmv_delta is not None else None, 
-                      delta_color='grey' if gmv_delta == 0 else 'normal')
+                      delta_color='grey' if gmv_delta == 0 else 'normal', border=True)
             if not single_day:
-                st.metric('Avg. Daily GMV', f"${filtered_df['gmv'].mean():,.2f}")
+                st.metric('Avg. Daily GMV', f"${filtered_df['gmv'].mean():,.2f}", border=True)
 
     with col3:  # items sold
         if comparison_df.empty:
@@ -242,9 +242,9 @@ with tab1:
                 st.metric('Avg. Daily Items Sold', '0')
         else:
             st.metric('Total Items Sold', f"{int(current_items):,}", delta=f'{items_delta:.2f}%' if items_delta is not None else None, 
-                      delta_color='grey' if items_delta == 0 else 'normal')
+                      delta_color='grey' if items_delta == 0 else 'normal', border=True)
             if not single_day:
-                st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}")
+                st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}", border=True)
 
     with col4:  # videos posted
         if comparison_df.empty:
@@ -260,9 +260,9 @@ with tab1:
                 st.metric('Avg. Daily Videos Posted', '0')
         else:
             st.metric('Total Videos Posted', f"{int(current_videos):,}", delta=f'{videos_delta:.2f}%' if videos_delta is not None else None, 
-                      delta_color='grey' if videos_delta == 0 else 'normal')
+                      delta_color='grey' if videos_delta == 0 else 'normal', border=True)
             if not single_day:
-                st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}")
+                st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}", border=True)
     
     with col5:  # views
         if comparison_df.empty:
@@ -278,16 +278,16 @@ with tab1:
                 st.metric('Avg. Daily Views', '0')
         else:
             st.metric('Total Views', f"{filtered_df['views'].sum():,}", delta=f'{views_delta:.2f}%' if views_delta is not None else None, 
-                      delta_color='grey' if views_delta == 0 else 'normal')
+                      delta_color='grey' if views_delta == 0 else 'normal', border=True)
             if not single_day:
-                st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}")
+                st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}", border=True)
 
     c1, c2, c3 = st.columns(3)
 
     # display average commission rate and quality
     with c1:
         if filtered_df.empty or filtered_df['gmv'].sum() == 0:
-            st.metric('Avg. Commission Rate', '-')
+            st.metric('Avg. Commission Rate', '-', border=True)
         else:
             avg_c_rate = metrics.avg_commission_rate(filtered_df)
             if avg_c_rate >= 20:
@@ -307,12 +307,12 @@ with tab1:
                 comparison_c_rate = metrics.avg_commission_rate(comparison_df)
                 delta = utils.calc_percent_change(avg_c_rate, comparison_c_rate)
 
-            st.metric('Avg. Commission Rate', f"{avg_c_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None)
+            st.metric('Avg. Commission Rate', f"{avg_c_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, border=True)
 
     # display conversion rate and quality
     with c2:
         if filtered_df.empty or filtered_df['views'].sum() == 0:
-            st.metric('Conversion Rate', '-')
+            st.metric('Conversion Rate', '-', border=True)
         else: 
             conv_rate = metrics.conversion_rate(filtered_df)
             if conv_rate >= 0.20:
@@ -332,12 +332,12 @@ with tab1:
                 comparison_conv_rate = metrics.conversion_rate(comparison_df)
                 delta = utils.calc_percent_change(conv_rate, comparison_conv_rate)
 
-            st.metric('Conversion Rate', f"{conv_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None)
+            st.metric('Conversion Rate', f"{conv_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, border=True)
 
     # display RPM and quality
     with c3:
         if filtered_df.empty or filtered_df['views'].sum() == 0:
-            st.metric('RPM', '-')
+            st.metric('RPM', '-', border=True)
         else:
             rpm = metrics.rpm(filtered_df)
             if rpm >= 10:
@@ -357,7 +357,7 @@ with tab1:
                 comparison_rpm = metrics.rpm(comparison_df)
                 delta = utils.calc_percent_change(rpm, comparison_rpm)
 
-            st.metric('RPM', f'${rpm} - {quality}', delta=f'{delta:.2f}%' if delta is not None else None)
+            st.metric('RPM', f'${rpm} - {quality}', delta=f'{delta:.2f}%' if delta is not None else None, border=True)
 
     if not single_day:
 
