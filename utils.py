@@ -88,9 +88,9 @@ import datetime
 def days_left_in_month(month, today):
     '''
     Calculates and returns the days remaining
-    in the current month.
+    in the selected month.
     '''
-    _, total_days = calendar.monthrange(today.year, today.month)
+    _, total_days = calendar.monthrange(month.year, month.month)
 
     if month.year == today.year and month.month == today.month:
         return total_days - today.day
