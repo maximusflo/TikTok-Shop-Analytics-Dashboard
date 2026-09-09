@@ -321,8 +321,6 @@ with tab2:
 
     # data input
     with left:
-        flex2 = st.container(horizontal=True)
-
         data_date_input = st.pills(label='Filter', label_visibility='collapsed',  options=['Today', 'Yesterday'], default='Today')
 
         # display current selected date
@@ -330,24 +328,19 @@ with tab2:
         if data_date_input == 'Yesterday':
             current_date = today - datetime.timedelta(days=1)
 
-        col1, col2, col3, col4, col5, col6 = st.columns([1.3, 1.4, 1, 1.1, 1.2, 1])
+        log_contain = st.container(horizontal=True)
 
-        with col1:  # date
-            current_date = st.date_input(f'Date: {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', value=current_date)
+        with log_contain:
+            current_date = log_contain.date_input(f'Date: {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', value=current_date)
 
-        with col2:  # commission
             commission = utils.float_input('commission', 'Commission', df, current_date)
 
-        with col3:  # gmv
             gmv = utils.float_input('gmv', 'GMV', df, current_date)
 
-        with col4:  # items_sold
             items_sold = utils.integer_input('items_sold', 'Items Sold', df, current_date)
 
-        with col5: # videos posted
             videos = utils.integer_input('videos', 'Videos Posted', df, current_date)
 
-        with col6:  # views
             views = utils.integer_input('views', 'Views', df, current_date)
 
         button_label = 'Save'
