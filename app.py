@@ -356,7 +356,7 @@ with tab2:
     with left:
         warning_box = st.empty()
         if utils.date_exists(df, current_date):
-            warning_box.info(f'About to update existing entry for {current_date}')
+            warning_box.info(f'About to update existing entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}')
             button_label = 'Update'
 
     if st.button(button_label):
@@ -385,7 +385,7 @@ with tab2:
                 session.commit()
 
             df = utils.load_data(connection, user_id)
-            st.success(f'Saved entry for {current_date}.')
+            st.success(f'Saved entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}.')
 
         # updating existing entry
         else:
@@ -415,7 +415,7 @@ with tab2:
 
             df = utils.load_data(connection, user_id)
             warning_box.empty()
-            st.success(f'Updated entry for {current_date}')
+            st.success(f'Updated entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}')
 
 # Goals tab
 with tab3:
@@ -484,7 +484,7 @@ with tab3:
         else:
             remaining_per_day = remaining
 
-        days_passed = datetime.date.today().day
+        days_passed = today.day
         monthly_predict = (current_value / days_passed) * (days_left + days_passed)
 
         goal_contain.metric('Projected', f'${monthly_predict:,.2f}')
