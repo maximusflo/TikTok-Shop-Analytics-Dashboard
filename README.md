@@ -10,6 +10,7 @@ Built with Python, Streamlit, PostgreSQL, Supabase, Pandas, and Plotly.
 - Daily performance logging
 - Editable past entries
 - Demo mode with fictional data
+- Period-over-period comparisons
 - Persistent PostgreSQL database storage
 - Interactive analytics dashboard
 - Date range filtering
