@@ -1,5 +1,3 @@
-
-
 def avg_commission_rate(df):
     '''
     Calculates average commission rate.
