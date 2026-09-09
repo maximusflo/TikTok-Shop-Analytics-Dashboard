@@ -96,3 +96,12 @@ def days_left_in_month(month, today):
         return total_days - today.day
     
     return total_days
+
+def calc_percent_change(current, previous):
+    '''
+    Calculates and returns percent change
+    between two metrics.
+    '''
+    if previous == 0:
+        return 0
+    return ((current - previous) / previous) * 100
