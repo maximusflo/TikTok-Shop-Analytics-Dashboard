@@ -236,7 +236,7 @@ with tab1:
     # display average commission rate and quality
     with c1:
         if filtered_df.empty or filtered_df['gmv'].sum() == 0:
-            st.metric('Average Commission Rate', '-')
+            st.metric('Avg. Commission Rate', '-')
         else:
             avg_c_rate = metrics.avg_commission_rate(filtered_df)
             if avg_c_rate >= 20:
@@ -250,7 +250,7 @@ with tab1:
             else:
                 quality = 'Poor'
             
-            st.metric('Average Commission Rate', f"{avg_c_rate}% - {quality}")
+            st.metric('Avg. Commission Rate', f"{avg_c_rate}% - {quality}")
 
     # display conversion rate and quality
     with c2:
@@ -321,10 +321,19 @@ with tab2:
 
     # data input
     with left:
+        flex2 = st.container(horizontal=True)
+
+        data_date_input = st.pills(label='Filter', label_visibility='collapsed',  options=['Today', 'Yesterday'], default='Today')
+
+        # display current selected date
+        current_date = today
+        if data_date_input == 'Yesterday':
+            current_date = today - datetime.timedelta(days=1)
+
         col1, col2, col3, col4, col5, col6 = st.columns([1.3, 1.4, 1, 1.1, 1.2, 1])
 
         with col1:  # date
-            current_date = st.date_input('Date', value=today)
+            current_date = st.date_input('Date', value=current_date)
             st.write(f"Date: {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}")
 
         with col2:  # commission
