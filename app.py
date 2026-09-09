@@ -194,7 +194,9 @@ with tab1:
     # performance metrics
     with col1:  # commission
         if comparison_df.empty:
-                commission_delta = None
+            commission_delta = None
+        elif prev_commission == 0 and current_commission > 0:
+            commission_delta = 100
         else:
             commission_delta = utils.calc_percent_change(current_commission, prev_commission)
 
@@ -211,6 +213,8 @@ with tab1:
     with col2:  # GMV
         if comparison_df.empty:
             gmv_delta = None
+        elif prev_gmv == 0 and current_gmv > 0:
+            gmv_delta = 100
         else:
             gmv_delta = utils.calc_percent_change(current_gmv, prev_gmv)
 
@@ -227,6 +231,8 @@ with tab1:
     with col3:  # items sold
         if comparison_df.empty:
             items_delta = None
+        elif prev_items == 0 and current_items > 0:
+            items_delta = 100
         else:
             items_delta = utils.calc_percent_change(current_items, prev_items)
 
@@ -243,6 +249,8 @@ with tab1:
     with col4:  # videos posted
         if comparison_df.empty:
             videos_delta = None
+        elif prev_videos == 0 and current_videos > 0:
+            videos_delta = 100
         else:
             videos_delta = utils.calc_percent_change(current_videos, prev_videos)
 
@@ -259,6 +267,8 @@ with tab1:
     with col5:  # views
         if comparison_df.empty:
             views_delta = None
+        elif prev_views == 0 and current_views > 0:
+            views_delta = 100
         else:
             views_delta = utils.calc_percent_change(current_views, prev_views)
 
