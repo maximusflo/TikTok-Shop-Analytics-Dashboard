@@ -66,8 +66,7 @@ def float_input(column, label, df, date):
         if date_exists(df, date):
             row = row_lookup(df, date)
             default = row[column]
-        value = float(st.number_input(label, value=default, key=f'{column}_{date}'))
-        st.write(f'{label}: ${value:,.2f}')
+        value = float(st.number_input(f'{label}: ${default:,.2f}', value=default, key=f'{column}_{date}'))
         return value
 
 def integer_input(column, label, df, date):
@@ -80,8 +79,7 @@ def integer_input(column, label, df, date):
     if date_exists(df, date):
         row = row_lookup(df, date)
         default = row[column]
-    value = int(st.number_input(label, value=default, key=f'{column}_{date}'))
-    st.write(f'{label}: {value:,}')
+    value = int(st.number_input(f'{label}: {default:,}', value=default, key=f'{column}_{date}'))
     return value
 
 import calendar
