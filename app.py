@@ -525,14 +525,12 @@ with tab3:
         remaining = 0
 
     if goal is not None and goal != 0:
-        st.markdown(f"## {selected_month.strftime('%B')} {selected_analytic} Goal", anchors=False)
+        st.markdown(f"### {selected_month.strftime('%B')} {selected_analytic} Goal", anchors=False)
 
-        lside, rside = st.columns([8.5, 1.5])
-        with lside:
+        prog_contain = st.container(horizontal=True)
+        with prog_contain:
             st.progress(progress)
-        with rside:
             st.markdown(f'### {(progress*100):.0f}%', anchors=False)
-
         
         goal_contain = st.container(horizontal=True)
         
