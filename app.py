@@ -253,26 +253,8 @@ with tab1:
                       delta_color='grey' if items_delta == 0 else 'normal', border=True)
             if not single_day:
                 st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}", border=True)
-
-    with col4:  # videos posted
-        if comparison_df.empty:
-            videos_delta = None
-        elif prev_videos == 0 and current_videos > 0:
-            videos_delta = 100
-        else:
-            videos_delta = utils.calc_percent_change(current_videos, prev_videos)
-
-        if filtered_df.empty:
-            st.metric('Videos Posted', '0', border=True)
-            if not single_day:
-                st.metric('Avg. Daily Videos Posted', '0', border=True)
-        else:
-            st.metric('Videos Posted', f"{int(current_videos):,}", delta=f'{videos_delta:.2f}%' if videos_delta is not None else None, 
-                      delta_color='grey' if videos_delta == 0 else 'normal', border=True)
-            if not single_day:
-                st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}", border=True)
     
-    with col5:  # views
+    with col4:  # views
         if comparison_df.empty:
             views_delta = None
         elif prev_views == 0 and current_views > 0:
@@ -289,6 +271,24 @@ with tab1:
                       delta_color='grey' if views_delta == 0 else 'normal', border=True)
             if not single_day:
                 st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}", border=True)
+
+    with col5:  # videos posted
+        if comparison_df.empty:
+            videos_delta = None
+        elif prev_videos == 0 and current_videos > 0:
+            videos_delta = 100
+        else:
+            videos_delta = utils.calc_percent_change(current_videos, prev_videos)
+
+        if filtered_df.empty:
+            st.metric('Videos Posted', '0', border=True)
+            if not single_day:
+                st.metric('Avg. Daily Videos Posted', '0', border=True)
+        else:
+            st.metric('Videos Posted', f"{int(current_videos):,}", delta=f'{videos_delta:.2f}%' if videos_delta is not None else None, 
+                      delta_color='grey' if videos_delta == 0 else 'normal', border=True)
+            if not single_day:
+                st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}", border=True)
 
     c1, c2, c3 = st.columns(3)
 
