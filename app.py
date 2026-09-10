@@ -561,37 +561,37 @@ with tab3:
 
             # current metric
             if current_value >= goal:
-                curr_delta = 'Complete'
+                curr_delta = ':material/check_circle: Complete'
             elif current_value != 0:
                 curr_delta = f'${(current_value / days_passed):,.2f}/day avg.'
             else:
                 curr_delta = f'$0/day avg.'
 
             goal_contain.metric('Current', f'${current_value:,.2f}', border=True, delta=curr_delta, 
-                                delta_arrow='off', delta_color='green' if curr_delta == 'Complete' else 'off')
+                                delta_arrow='off', delta_color='green' if curr_delta == ':material/check_circle: Complete' else 'off')
 
             # remaining metric
             if current_value >= goal:
-                remain_delta = 'Complete'
+                remain_delta = ':material/check_circle: Complete'
             elif remaining_per_day < 0.01:
                 remain_delta = '<$0.01/day required'
             else:
                 remain_delta = f'${remaining_per_day:,.2f}/day required'
             
             goal_contain.metric('Remaining', f'${remaining:,.2f}', border=True, delta=remain_delta, 
-                                delta_arrow='off', delta_color='green' if remain_delta == 'Complete' else 'off')
+                                delta_arrow='off', delta_color='green' if remain_delta == ':material/check_circle: Complete' else 'off')
 
             # projected metric
             if current_value >= goal:
-                proj_delta = 'Complete'
+                proj_delta = ':material/check_circle: Complete'
             elif monthly_predict >= goal:
-                proj_delta = 'On track'
+                proj_delta = ':material/trending_up: On track'
             else:
-                proj_delta = 'Behind'
+                proj_delta = ':material/trending_down: Behind'
 
             if today.year == selected_month.year and today.month == selected_month.month:
                 goal_contain.metric('Projected', f'${monthly_predict:,.2f}', border=True, delta=proj_delta, delta_arrow='off', 
-                                    delta_color='red' if proj_delta == 'Behind' else 'green')
+                                    delta_color='red' if proj_delta == ':material/trending_down: Behind' else 'green')
             else:
                 goal_contain.metric('Projected', '-', border=True)
 
