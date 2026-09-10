@@ -84,7 +84,7 @@ if not st.session_state.get('demo_mode', False):
     st.sidebar.button('Log out', on_click=st.logout)
 else:
     st.title('Creator Analytics - DEMO MODE', anchor=False)
-    st.info('*All data shown is fictional and for demonstration purposes only.*', icon=':material/info:')
+    st.info('*All data shown is fictional and for demonstration purposes only.*', icon=':material/info_i:')
 
     st.sidebar.write(f'Logged in as demo user')
     st.sidebar.space()
@@ -426,7 +426,7 @@ with tab2:
     with st.container(width='content'):
         warning_box = st.empty()
         if utils.date_exists(df, current_date):
-            warning_box.info(f'About to update entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/info:')
+            warning_box.info(f'About to update entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/info_i:')
             button_label = 'Update'
 
     if st.button(button_label):
