@@ -162,9 +162,9 @@ with tab1:
 
     if start_date == end_date:
         single_day = True
-        st.write(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')}** (CDT)")
+        st.caption(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')}** (CDT)")
     else:
-        st.write(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')} - {end_date.strftime('%b %d, %Y').replace(' 0', ' ')}** (CDT)")
+        st.caption(f"**{start_date.strftime('%b %d, %Y').replace(' 0', ' ')} - {end_date.strftime('%b %d, %Y').replace(' 0', ' ')}** (CDT)")
 
     period_length = (end_date - start_date).days + 1
     comparison_end = start_date - datetime.timedelta(days=1)
@@ -496,7 +496,7 @@ with tab2:
 with tab3:
     goals_content = st.empty()
 
-    with st.popover('Goal options'):
+    with st.popover('Goal options', wrap=True):
         months = []
         analytics = ['Commission', 'GMV']
 
@@ -541,6 +541,8 @@ with tab3:
     with goals_content.container():
         if goal is not None and goal != 0:
             st.markdown(f"### {selected_month.strftime('%B')} {selected_analytic} Goal", anchors=False)
+
+            st.caption(f"**{today.strftime('%b %d, %Y').replace(' 0', ' ')}** (CDT)")
 
             prog_contain = st.container(horizontal=True)
             with prog_contain:
