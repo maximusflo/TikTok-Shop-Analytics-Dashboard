@@ -426,7 +426,7 @@ with tab2:
     with st.container(width='content'):
         warning_box = st.empty()
         if utils.date_exists(df, current_date):
-            warning_box.info(f'About to update existing entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/info:')
+            warning_box.info(f'About to update entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/info:')
             button_label = 'Update'
 
     if st.button(button_label):
