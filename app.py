@@ -76,22 +76,25 @@ else:
 connection = database.get_connection()
 
 # side bar
+st.sidebar.title('Creator Analytics')
 if not st.session_state.get('demo_mode', False):
     st.sidebar.write(f'Logged in as {st.user.name}')
     st.sidebar.write(f'Email: {st.user.email}')
+    st.sidebar.space()
     st.sidebar.button('Log out', on_click=st.logout)
 else:
-    st.title('Creator Analytics Dashboard - DEMO MODE', anchor=False)
+    st.title('Creator Analytics - DEMO MODE', anchor=False)
     st.info('*All data shown is fictional and for demonstration purposes only.*')
 
     st.sidebar.write(f'Logged in as demo user')
+    st.sidebar.space()
     st.sidebar.button('Exit Demo', on_click=st.logout)
 
 tab1, tab2, tab3, tab4 = st.tabs(['Analytics', 'Daily Log', 'Goals', 'Data'])
 
 df = utils.load_data(connection, user_id)
 
-# Analytics tab
+### Analytics tab
 with tab1:
 
     # filter dates button
@@ -183,7 +186,7 @@ with tab1:
     prev_items = comparison_df['items_sold'].sum()
     prev_videos = comparison_df['videos'].sum()
     prev_views = comparison_df['views'].sum()
-    
+
     col1, col2, col3, col4, col5 = st.columns(5)
 
     # get max rows if available
@@ -378,18 +381,18 @@ with tab1:
         views_fig.update_layout(xaxis=dict(fixedrange=True, title=None), yaxis=(dict(fixedrange=True, title=None)), dragmode=False)
         st.plotly_chart(views_fig, width='stretch', config={'displayModeBar': False, 'staticPlot': False})
 
-    # GMV line chart
-    #    gmv_fig = px.line(filtered_df, x='date', y='gmv', title='Daily GMV')
-    #    gmv_fig.update_traces(line=dict(color='green'))
-    #    gmv_fig.update_layout(yaxis=(dict(tickprefix='$')))
-    #    st.plotly_chart(gmv_fig, width='stretch')
+        # GMV line chart
+        #gmv_fig = px.line(filtered_df, x='date', y='gmv', title='Daily GMV')
+        #gmv_fig.update_traces(line=dict(color='green'))
+        #gmv_fig.update_layout(yaxis=(dict(tickprefix='$')))
+        #st.plotly_chart(gmv_fig, width='stretch')
 
-    # videos posted line chart
-    #    items_fig = px.line(filtered_df, x='date', y='videos', title='Daily Videos Posted')
-    #    items_fig.update_traces(line=dict(color='orange'))
-    #    st.plotly_chart(items_fig, width='stretch')
+        # videos posted line chart
+        #items_fig = px.line(filtered_df, x='date', y='videos', title='Daily Videos Posted')
+        #items_fig.update_traces(line=dict(color='orange'))
+        #st.plotly_chart(items_fig, width='stretch')
 
-# Daily Log tab
+### Daily Log tab
 with tab2:
     left, right = st.columns([1.75, 1])
 
@@ -484,7 +487,7 @@ with tab2:
             warning_box.empty()
             st.success(f'Updated entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}')
 
-# Goals tab
+### Goals tab
 with tab3:
     with st.popover('Goal options'):
         months = []
@@ -570,7 +573,7 @@ with tab3:
 
     #st.markdown(f'## **\\${current_value:,.0f} / \\${goal:,.0f}**', anchors=False)
 
-# Data tab
+### Data tab
 with tab4:
     st.title('All Data', anchor=False)
 
