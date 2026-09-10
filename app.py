@@ -209,9 +209,9 @@ with tab1:
             commission_delta = utils.calc_percent_change(current_commission, prev_commission)
 
         if filtered_df.empty:
-            st.metric('Commission', '$0')
+            st.metric('Commission', '$0', border=True)
             if not single_day:
-                st.metric('Avg. Daily Commission', '$0')
+                st.metric('Avg. Daily Commission', '$0', border=True)
         else:
             st.metric('Commission', f"${current_commission:,.2f}", delta=f'{commission_delta:.2f}%' if commission_delta is not None else None, 
                       delta_color='grey' if commission_delta == 0 else 'normal', border=True)
@@ -227,9 +227,9 @@ with tab1:
             gmv_delta = utils.calc_percent_change(current_gmv, prev_gmv)
 
         if filtered_df.empty:
-            st.metric('GMV', '$0')
+            st.metric('GMV', '$0', border=True)
             if not single_day:
-                st.metric('Avg. Daily GMV', '$0')
+                st.metric('Avg. Daily GMV', '$0', border=True)
         else:
             st.metric('GMV', f"${current_gmv:,.2f}", delta=f'{gmv_delta:.2f}%' if gmv_delta is not None else None, 
                       delta_color='grey' if gmv_delta == 0 else 'normal', border=True)
@@ -245,9 +245,9 @@ with tab1:
             items_delta = utils.calc_percent_change(current_items, prev_items)
 
         if filtered_df.empty:
-            st.metric('Items Sold', '0')
+            st.metric('Items Sold', '0', border=True)
             if not single_day:
-                st.metric('Avg. Daily Items Sold', '0')
+                st.metric('Avg. Daily Items Sold', '0', border=True)
         else:
             st.metric('Items Sold', f"{int(current_items):,}", delta=f'{items_delta:.2f}%' if items_delta is not None else None, 
                       delta_color='grey' if items_delta == 0 else 'normal', border=True)
@@ -263,9 +263,9 @@ with tab1:
             videos_delta = utils.calc_percent_change(current_videos, prev_videos)
 
         if filtered_df.empty:
-            st.metric('Videos Posted', '0')
+            st.metric('Videos Posted', '0', border=True)
             if not single_day:
-                st.metric('Avg. Daily Videos Posted', '0')
+                st.metric('Avg. Daily Videos Posted', '0', border=True)
         else:
             st.metric('Videos Posted', f"{int(current_videos):,}", delta=f'{videos_delta:.2f}%' if videos_delta is not None else None, 
                       delta_color='grey' if videos_delta == 0 else 'normal', border=True)
@@ -281,9 +281,9 @@ with tab1:
             views_delta = utils.calc_percent_change(current_views, prev_views)
 
         if filtered_df.empty:
-            st.metric('Views', '0')
+            st.metric('Views', '0', border=True)
             if not single_day:
-                st.metric('Avg. Daily Views', '0')
+                st.metric('Avg. Daily Views', '0', border=True)
         else:
             st.metric('Views', f"{filtered_df['views'].sum():,}", delta=f'{views_delta:.2f}%' if views_delta is not None else None, 
                       delta_color='grey' if views_delta == 0 else 'normal', border=True)
