@@ -201,11 +201,11 @@ with tab1:
             commission_delta = utils.calc_percent_change(current_commission, prev_commission)
 
         if filtered_df.empty:
-            st.metric('Total Commission', '$0')
+            st.metric('Commission', '$0')
             if not single_day:
                 st.metric('Avg. Daily Commission', '$0')
         else:
-            st.metric('Total Commission', f"${current_commission:,.2f}", delta=f'{commission_delta:.2f}%' if commission_delta is not None else None, 
+            st.metric('Commission', f"${current_commission:,.2f}", delta=f'{commission_delta:.2f}%' if commission_delta is not None else None, 
                       delta_color='grey' if commission_delta == 0 else 'normal', border=True)
             if not single_day:
                 st.metric('Avg. Daily Commission', f"${filtered_df['commission'].mean():,.2f}", border=True)
@@ -219,11 +219,11 @@ with tab1:
             gmv_delta = utils.calc_percent_change(current_gmv, prev_gmv)
 
         if filtered_df.empty:
-            st.metric('Total GMV', '$0')
+            st.metric('GMV', '$0')
             if not single_day:
                 st.metric('Avg. Daily GMV', '$0')
         else:
-            st.metric('Total GMV', f"${current_gmv:,.2f}", delta=f'{gmv_delta:.2f}%' if gmv_delta is not None else None, 
+            st.metric('GMV', f"${current_gmv:,.2f}", delta=f'{gmv_delta:.2f}%' if gmv_delta is not None else None, 
                       delta_color='grey' if gmv_delta == 0 else 'normal', border=True)
             if not single_day:
                 st.metric('Avg. Daily GMV', f"${filtered_df['gmv'].mean():,.2f}", border=True)
@@ -237,11 +237,11 @@ with tab1:
             items_delta = utils.calc_percent_change(current_items, prev_items)
 
         if filtered_df.empty:
-            st.metric('Total Items Sold', '0')
+            st.metric('Items Sold', '0')
             if not single_day:
                 st.metric('Avg. Daily Items Sold', '0')
         else:
-            st.metric('Total Items Sold', f"{int(current_items):,}", delta=f'{items_delta:.2f}%' if items_delta is not None else None, 
+            st.metric('Items Sold', f"{int(current_items):,}", delta=f'{items_delta:.2f}%' if items_delta is not None else None, 
                       delta_color='grey' if items_delta == 0 else 'normal', border=True)
             if not single_day:
                 st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}", border=True)
@@ -255,11 +255,11 @@ with tab1:
             videos_delta = utils.calc_percent_change(current_videos, prev_videos)
 
         if filtered_df.empty:
-            st.metric('Total Videos Posted', '0')
+            st.metric('Videos Posted', '0')
             if not single_day:
                 st.metric('Avg. Daily Videos Posted', '0')
         else:
-            st.metric('Total Videos Posted', f"{int(current_videos):,}", delta=f'{videos_delta:.2f}%' if videos_delta is not None else None, 
+            st.metric('Videos Posted', f"{int(current_videos):,}", delta=f'{videos_delta:.2f}%' if videos_delta is not None else None, 
                       delta_color='grey' if videos_delta == 0 else 'normal', border=True)
             if not single_day:
                 st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}", border=True)
@@ -273,11 +273,11 @@ with tab1:
             views_delta = utils.calc_percent_change(current_views, prev_views)
 
         if filtered_df.empty:
-            st.metric('Total Views', '0')
+            st.metric('Views', '0')
             if not single_day:
                 st.metric('Avg. Daily Views', '0')
         else:
-            st.metric('Total Views', f"{filtered_df['views'].sum():,}", delta=f'{views_delta:.2f}%' if views_delta is not None else None, 
+            st.metric('Views', f"{filtered_df['views'].sum():,}", delta=f'{views_delta:.2f}%' if views_delta is not None else None, 
                       delta_color='grey' if views_delta == 0 else 'normal', border=True)
             if not single_day:
                 st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}", border=True)
@@ -529,14 +529,15 @@ with tab3:
 
         prog_contain = st.container(horizontal=True)
         with prog_contain:
-            st.progress(progress)
-            st.markdown(f'### {(progress*100):.0f}%', anchors=False)
+            st.progress(progress, text=f'Progress - {(progress*100):.0f}%')
+            #st.markdown(f'#### {(progress*100):.0f}%', anchors=False)
+            st.markdown(f'### ${goal:,.0f}', anchors=False)
         
         goal_contain = st.container(horizontal=True)
         
-        goal_contain.metric('Goal', f'${goal:,.0f}')
-        goal_contain.metric('Current', f'${current_value:,.2f}')
-        goal_contain.metric('Remaining', f'${remaining:,.2f}')
+        #goal_contain.metric('Goal', f'${goal:,.0f}', border=True)
+        goal_contain.metric('Current', f'${current_value:,.2f}', border=True)
+        goal_contain.metric('Remaining', f'${remaining:,.2f}', border=True)
 
         days_left = utils.days_left_in_month(selected_month, today)
         if days_left > 0:
@@ -547,18 +548,22 @@ with tab3:
         days_passed = today.day
         monthly_predict = (current_value / days_passed) * (days_left + days_passed)
 
-        goal_contain.metric('Projected', f'${monthly_predict:,.2f}')
+        if today.month == selected_month.month:
+            goal_contain.metric('Projected', f'${monthly_predict:,.2f}', border=True)
+        else:
+            goal_contain.metric('Projected', '-', border=True)
 
-        if remaining_per_day < 0.01:
+        if remaining_per_day < 0.01 and not progress == 1.0:
             st.markdown(f"##### Less than $0.01 required per day to complete goal.", anchors=False)
         elif progress == 1.0:
-            st.markdown(f"##### {selected_month.strftime('%B')} {selected_analytic} goal completed, nice work.")
+            st.markdown(f"##### {selected_month.strftime('%B')} {selected_analytic} goal completed. Nice work.", anchors=False)
         else:
-            st.markdown(f"##### ${remaining_per_day:,.2f} required per day to complete goal.", anchors=False)
+            st.markdown(f"##### ${remaining_per_day:,.2f}/day required to hit goal.", anchors=False)
+            
     else:
         st.markdown('#### No current goal.', anchors=False)
 
-    #st.markdown(f"## **\\${current_value:,.0f} / \\${goal:,.0f}**", anchors=False)
+    #st.markdown(f'## **\\${current_value:,.0f} / \\${goal:,.0f}**', anchors=False)
 
 # Data tab
 with tab4:
