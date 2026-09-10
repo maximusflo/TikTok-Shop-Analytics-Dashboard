@@ -501,7 +501,7 @@ with tab3:
             months.append(month_date)
 
         selected_month = st.selectbox('Month', months, format_func=lambda x: x.strftime('%B'))
-        selected_analytic = st.selectbox('Analytic', analytics)
+        selected_analytic = st.selectbox('Metric', analytics)
         goal_amount = st.number_input('Amount', min_value=0, step=100, format='%d')
 
         if st.button('Save Goal'):
@@ -539,15 +539,9 @@ with tab3:
 
         prog_contain = st.container(horizontal=True)
         with prog_contain:
-            st.progress(progress, text=f'Progress - {(progress*100):.0f}%')
+            st.progress(progress, text=f'{(progress*100):.1f}%')
             #st.markdown(f'#### {(progress*100):.0f}%', anchors=False)
             st.markdown(f'### ${goal:,.0f}', anchors=False)
-        
-        goal_contain = st.container(horizontal=True)
-        
-        #goal_contain.metric('Goal', f'${goal:,.0f}', border=True)
-        goal_contain.metric('Current', f'${current_value:,.2f}', border=True)
-        goal_contain.metric('Remaining', f'${remaining:,.2f}', border=True)
 
         days_left = utils.days_left_in_month(selected_month, today)
         if days_left > 0:
@@ -558,22 +552,49 @@ with tab3:
         days_passed = today.day
         monthly_predict = (current_value / days_passed) * (days_left + days_passed)
 
-        if today.month == selected_month.month:
-            goal_contain.metric('Projected', f'${monthly_predict:,.2f}', border=True)
+        goal_contain = st.container(horizontal=True)
+
+        # current metric
+        if current_value >= goal:
+            curr_delta = 'Complete'
+        elif current_value != 0:
+            curr_delta = f'${(current_value / days_passed):,.2f}/day avg.'
+        else:
+            curr_delta = f'$0/day avg.'
+
+        goal_contain.metric('Current', f'${current_value:,.2f}', border=True, delta=curr_delta, 
+                            delta_arrow='off', delta_color='green' if curr_delta == 'Complete' else 'off')
+
+        # remaining metric
+        if current_value >= goal:
+            remain_delta = 'Complete'
+        elif remaining_per_day < 0.01:
+            remain_delta = '<$0.01/day required'
+        else:
+            remain_delta = f'${remaining_per_day:,.2f}/day required'
+        
+        goal_contain.metric('Remaining', f'${remaining:,.2f}', border=True, delta=remain_delta, 
+                            delta_arrow='off', delta_color='green' if remain_delta == 'Complete' else 'off')
+
+        # projected metric
+        if current_value >= goal:
+            proj_delta = 'Complete'
+        elif monthly_predict >= goal:
+            proj_delta = 'On track'
+        else:
+            proj_delta = 'Behind'
+
+        if today.year == selected_month.year and today.month == selected_month.month:
+            goal_contain.metric('Projected', f'${monthly_predict:,.2f}', border=True, delta=proj_delta, delta_arrow='off', 
+                                delta_color='red' if proj_delta == 'Behind' else 'green')
         else:
             goal_contain.metric('Projected', '-', border=True)
 
-        if remaining_per_day < 0.01 and not progress == 1.0:
-            st.markdown(f"##### Less than $0.01 required per day to complete goal.", anchors=False)
-        elif progress == 1.0:
+        if progress == 1.0:
             st.markdown(f"##### {selected_month.strftime('%B')} {selected_analytic} goal completed. Nice work.", anchors=False)
-        else:
-            st.markdown(f"##### ${remaining_per_day:,.2f}/day required to hit goal.", anchors=False)
             
     else:
         st.markdown('#### No current goal.', anchors=False)
-
-    #st.markdown(f'## **\\${current_value:,.0f} / \\${goal:,.0f}**', anchors=False)
 
 ### Data tab
 with tab4:
