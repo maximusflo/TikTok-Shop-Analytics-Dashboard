@@ -84,7 +84,7 @@ if not st.session_state.get('demo_mode', False):
     st.sidebar.button('Log out', on_click=st.logout)
 else:
     st.title('Creator Analytics - DEMO MODE', anchor=False)
-    st.info('*All data shown is fictional and for demonstration purposes only.*')
+    st.info('*All data shown is fictional and for demonstration purposes only.*', icon=':material/info:')
 
     st.sidebar.write(f'Logged in as demo user')
     st.sidebar.space()
@@ -423,10 +423,10 @@ with tab2:
         button_label = 'Save'
 
     # warns user they are updating an existing entry date
-    with left:
+    with st.container(width='content'):
         warning_box = st.empty()
         if utils.date_exists(df, current_date):
-            warning_box.info(f'About to update existing entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}')
+            warning_box.info(f'About to update existing entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/info:')
             button_label = 'Update'
 
     if st.button(button_label):
@@ -455,7 +455,8 @@ with tab2:
                 session.commit()
 
             df = utils.load_data(connection, user_id)
-            st.success(f'Saved entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}.')
+            with st.container(width='content'):
+                st.success(f'Saved entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}.', icon=':material/check_circle:')
 
         # updating existing entry
         else:
@@ -484,8 +485,9 @@ with tab2:
                 session.commit()
 
             df = utils.load_data(connection, user_id)
-            warning_box.empty()
-            st.success(f'Updated entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}')
+            with st.container(width='content'):
+                warning_box.empty()
+                st.success(f'Updated entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/check_circle:')
 
 ### Goals tab
 with tab3:
