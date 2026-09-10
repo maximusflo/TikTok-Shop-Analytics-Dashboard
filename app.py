@@ -315,7 +315,8 @@ with tab1:
                 comparison_c_rate = metrics.avg_commission_rate(comparison_df)
                 delta = utils.calc_percent_change(avg_c_rate, comparison_c_rate)
 
-            st.metric('Avg. Commission Rate', f"{avg_c_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, border=True)
+            st.metric('Avg. Commission Rate', f"{avg_c_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, 
+                      delta_color='grey' if delta == 0 else 'normal', border=True)
 
     # display conversion rate and quality
     with c2:
@@ -340,7 +341,8 @@ with tab1:
                 comparison_conv_rate = metrics.conversion_rate(comparison_df)
                 delta = utils.calc_percent_change(conv_rate, comparison_conv_rate)
 
-            st.metric('Conversion Rate', f"{conv_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, border=True)
+            st.metric('Conversion Rate', f"{conv_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, 
+                      delta_color='grey' if delta == 0 else 'normal', border=True)
 
     # display RPM and quality
     with c3:
@@ -365,7 +367,8 @@ with tab1:
                 comparison_rpm = metrics.rpm(comparison_df)
                 delta = utils.calc_percent_change(rpm, comparison_rpm)
 
-            st.metric('RPM', f'${rpm} - {quality}', delta=f'{delta:.2f}%' if delta is not None else None, border=True)
+            st.metric('RPM', f'${rpm} - {quality}', delta=f'{delta:.2f}%' if delta is not None else None, 
+                      delta_color='grey' if delta == 0 else 'normal', border=True)
 
     if not single_day:
 
