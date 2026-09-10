@@ -33,17 +33,22 @@ button {
 
 # user authentication
 if not st.user.is_logged_in and not st.session_state.get('demo_mode', False):
-    st.title('Creator Analytics Dashboard', anchor=False)
-    st.markdown('##### Track and analyze your affiliate performance data.', anchors=False)
-    st.divider()
+    st.title('Creator Analytics', anchor=False, text_alignment='center')
+    st.markdown('##### Track and analyze your affiliate performance data.', anchors=False, text_alignment='center')
 
-    flex = st.container(horizontal=True)
+    st.space()
 
-    if flex.button('Sign in with Google'):
+    flex = st.container(horizontal=True, horizontal_alignment='center')
+
+    if flex.button('Sign in with Google', icon=':material/login:'):
         st.login()
     if flex.button('Try Demo'):
         st.session_state.demo_mode = True
         st.rerun()
+
+    st.space()
+
+    st.image('images/screenshot.png', output_format='PNG')
 
     st.markdown("""
     <style>
