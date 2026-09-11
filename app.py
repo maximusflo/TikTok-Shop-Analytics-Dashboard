@@ -290,85 +290,86 @@ with tab1:
             if not single_day:
                 st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}", border=True)
 
-    c1, c2, c3 = st.columns(3)
+    with st.container(border=True):
+        c1, c2, c3 = st.columns(3)
 
-    # display average commission rate and quality
-    with c1:
-        if filtered_df.empty or filtered_df['gmv'].sum() == 0:
-            st.metric('Avg. Commission Rate', '-', border=True)
-        else:
-            avg_c_rate = metrics.avg_commission_rate(filtered_df)
-            if avg_c_rate >= 20:
-                quality = 'Excellent'
-            elif avg_c_rate >= 15:
-                quality = 'Great'
-            elif avg_c_rate >= 10:
-                quality = 'Good'
-            elif avg_c_rate >= 5:
-                quality = 'Weak'
+        # display average commission rate and quality
+        with c1:
+            if filtered_df.empty or filtered_df['gmv'].sum() == 0:
+                st.metric('Avg. Commission Rate', '-')
             else:
-                quality = 'Poor'
+                avg_c_rate = metrics.avg_commission_rate(filtered_df)
+                if avg_c_rate >= 20:
+                    quality = 'Excellent'
+                elif avg_c_rate >= 15:
+                    quality = 'Great'
+                elif avg_c_rate >= 10:
+                    quality = 'Good'
+                elif avg_c_rate >= 5:
+                    quality = 'Weak'
+                else:
+                    quality = 'Poor'
 
-            if comparison_df.empty or comparison_df['gmv'].sum(0) == 0:
-                delta = None
+                if comparison_df.empty or comparison_df['gmv'].sum(0) == 0:
+                    delta = None
+                else:
+                    comparison_c_rate = metrics.avg_commission_rate(comparison_df)
+                    delta = utils.calc_percent_change(avg_c_rate, comparison_c_rate)
+
+                st.metric('Avg. Commission Rate', f"{avg_c_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, 
+                        delta_color='grey' if delta == 0 else 'normal')
+
+        # display conversion rate and quality
+        with c2:
+            if filtered_df.empty or filtered_df['views'].sum() == 0:
+                st.metric('Conversion Rate', '-', border=True)
+            else: 
+                conv_rate = metrics.conversion_rate(filtered_df)
+                if conv_rate >= 0.20:
+                    quality = 'Excellent'
+                elif conv_rate >= 0.10:
+                    quality = 'Great'
+                elif conv_rate >= 0.05:
+                    quality = 'Good'
+                elif conv_rate >= 0.01:
+                    quality = 'Weak'
+                else:
+                    quality = 'Poor'
+
+                if comparison_df.empty or comparison_df['views'].sum(0) == 0:
+                    delta = None
+                else:
+                    comparison_conv_rate = metrics.conversion_rate(comparison_df)
+                    delta = utils.calc_percent_change(conv_rate, comparison_conv_rate)
+
+                st.metric('Conversion Rate', f"{conv_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, 
+                        delta_color='grey' if delta == 0 else 'normal')
+
+        # display RPM and quality
+        with c3:
+            if filtered_df.empty or filtered_df['views'].sum() == 0:
+                st.metric('RPM', '-', border=True)
             else:
-                comparison_c_rate = metrics.avg_commission_rate(comparison_df)
-                delta = utils.calc_percent_change(avg_c_rate, comparison_c_rate)
+                rpm = metrics.rpm(filtered_df)
+                if rpm >= 10:
+                    quality = 'Excellent'
+                elif rpm >= 5:
+                    quality = 'Great'
+                elif rpm >= 1.5:
+                    quality = 'Good'
+                elif rpm >= 1:
+                    quality = 'Weak'
+                else:
+                    quality = 'Poor'
 
-            st.metric('Avg. Commission Rate', f"{avg_c_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, 
-                      delta_color='grey' if delta == 0 else 'normal', border=True)
+                if comparison_df.empty or comparison_df['views'].sum(0) == 0:
+                    delta = None
+                else:
+                    comparison_rpm = metrics.rpm(comparison_df)
+                    delta = utils.calc_percent_change(rpm, comparison_rpm)
 
-    # display conversion rate and quality
-    with c2:
-        if filtered_df.empty or filtered_df['views'].sum() == 0:
-            st.metric('Conversion Rate', '-', border=True)
-        else: 
-            conv_rate = metrics.conversion_rate(filtered_df)
-            if conv_rate >= 0.20:
-                quality = 'Excellent'
-            elif conv_rate >= 0.10:
-                quality = 'Great'
-            elif conv_rate >= 0.05:
-                quality = 'Good'
-            elif conv_rate >= 0.01:
-                quality = 'Weak'
-            else:
-                quality = 'Poor'
-
-            if comparison_df.empty or comparison_df['views'].sum(0) == 0:
-                delta = None
-            else:
-                comparison_conv_rate = metrics.conversion_rate(comparison_df)
-                delta = utils.calc_percent_change(conv_rate, comparison_conv_rate)
-
-            st.metric('Conversion Rate', f"{conv_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, 
-                      delta_color='grey' if delta == 0 else 'normal', border=True)
-
-    # display RPM and quality
-    with c3:
-        if filtered_df.empty or filtered_df['views'].sum() == 0:
-            st.metric('RPM', '-', border=True)
-        else:
-            rpm = metrics.rpm(filtered_df)
-            if rpm >= 10:
-                quality = 'Excellent'
-            elif rpm >= 5:
-                quality = 'Great'
-            elif rpm >= 1.5:
-                quality = 'Good'
-            elif rpm >= 1:
-                quality = 'Weak'
-            else:
-                quality = 'Poor'
-
-            if comparison_df.empty or comparison_df['views'].sum(0) == 0:
-                delta = None
-            else:
-                comparison_rpm = metrics.rpm(comparison_df)
-                delta = utils.calc_percent_change(rpm, comparison_rpm)
-
-            st.metric('RPM', f'${rpm} - {quality}', delta=f'{delta:.2f}%' if delta is not None else None, 
-                      delta_color='grey' if delta == 0 else 'normal', border=True)
+                st.metric('RPM', f'${rpm} - {quality}', delta=f'{delta:.2f}%' if delta is not None else None, 
+                        delta_color='grey' if delta == 0 else 'normal')
 
     if not single_day:
 
