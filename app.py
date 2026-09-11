@@ -187,8 +187,6 @@ with tab1:
     prev_videos = comparison_df['videos'].sum()
     prev_views = comparison_df['views'].sum()
 
-    col1, col2, col3, col4, col5 = st.columns(5)
-
     # get max rows if available
     if filtered_df.empty:
         st.warning('No data available.')
@@ -200,7 +198,11 @@ with tab1:
         max_views_row = utils.get_max_row(filtered_df, 'views')
 
     # performance metrics
-    with col1:  # commission
+    with st.container(horizontal=True, wrap=True):
+
+        # commission
+        comm_contain = st.container(border=True)
+
         if comparison_df.empty:
             commission_delta = None
         elif prev_commission == 0 and current_commission > 0:
@@ -209,16 +211,19 @@ with tab1:
             commission_delta = utils.calc_percent_change(current_commission, prev_commission)
 
         if filtered_df.empty:
-            st.metric('Commission', '$0', border=True)
+            comm_contain.metric('Commission', '$0')
             if not single_day:
-                st.metric('Avg. Daily Commission', '$0', border=True)
+                comm_contain.caption('$0/day avg.')
         else:
-            st.metric('Commission', f"${current_commission:,.2f}", delta=f'{commission_delta:.2f}%' if commission_delta is not None else None, 
-                      delta_color='grey' if commission_delta == 0 else 'normal', border=True)
+            comm_contain.metric('Commission', f"${current_commission:,.2f}", delta=f'{commission_delta:.2f}%' if commission_delta is not None else None, 
+                      delta_color='grey' if commission_delta == 0 else 'normal')
             if not single_day:
-                st.metric('Avg. Daily Commission', f"${filtered_df['commission'].mean():,.2f}", border=True)
+                #st.metric('Avg. Daily Commission', f"${filtered_df['commission'].mean():,.2f}", border=True)
+                comm_contain.caption(f"${filtered_df['commission'].mean():,.2f}/day avg.")
 
-    with col2:  # GMV
+        # GMV
+        gmv_contain = st.container(border=True)
+
         if comparison_df.empty:
             gmv_delta = None
         elif prev_gmv == 0 and current_gmv > 0:
@@ -227,16 +232,19 @@ with tab1:
             gmv_delta = utils.calc_percent_change(current_gmv, prev_gmv)
 
         if filtered_df.empty:
-            st.metric('GMV', '$0', border=True)
+            gmv_contain.metric('GMV', '$0')
             if not single_day:
-                st.metric('Avg. Daily GMV', '$0', border=True)
+                gmv_contain.caption('$0/day avg.')
         else:
-            st.metric('GMV', f"${current_gmv:,.2f}", delta=f'{gmv_delta:.2f}%' if gmv_delta is not None else None, 
-                      delta_color='grey' if gmv_delta == 0 else 'normal', border=True)
+            gmv_contain.metric('GMV', f"${current_gmv:,.2f}", delta=f'{gmv_delta:.2f}%' if gmv_delta is not None else None, 
+                      delta_color='grey' if gmv_delta == 0 else 'normal')
             if not single_day:
-                st.metric('Avg. Daily GMV', f"${filtered_df['gmv'].mean():,.2f}", border=True)
+                #st.metric('Avg. Daily GMV', f"${filtered_df['gmv'].mean():,.2f}", border=True)
+                gmv_contain.caption(f"${filtered_df['gmv'].mean():,.2f}/day avg.")
 
-    with col3:  # items sold
+        # items sold
+        items_contain = st.container(border=True)
+
         if comparison_df.empty:
             items_delta = None
         elif prev_items == 0 and current_items > 0:
@@ -245,16 +253,19 @@ with tab1:
             items_delta = utils.calc_percent_change(current_items, prev_items)
 
         if filtered_df.empty:
-            st.metric('Items Sold', '0', border=True)
+            items_contain.metric('Items Sold', '0')
             if not single_day:
-                st.metric('Avg. Daily Items Sold', '0', border=True)
+                items_contain.caption('0/day avg.')
         else:
-            st.metric('Items Sold', f"{int(current_items):,}", delta=f'{items_delta:.2f}%' if items_delta is not None else None, 
-                      delta_color='grey' if items_delta == 0 else 'normal', border=True)
+            items_contain.metric('Items Sold', f"{int(current_items):,}", delta=f'{items_delta:.2f}%' if items_delta is not None else None, 
+                      delta_color='grey' if items_delta == 0 else 'normal')
             if not single_day:
-                st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}", border=True)
+                #st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}", border=True)
+                items_contain.caption(f"{filtered_df['items_sold'].mean():,.1f}/day avg.")
     
-    with col4:  # views
+        # views
+        views_contain = st.container(border=True)
+
         if comparison_df.empty:
             views_delta = None
         elif prev_views == 0 and current_views > 0:
@@ -263,16 +274,19 @@ with tab1:
             views_delta = utils.calc_percent_change(current_views, prev_views)
 
         if filtered_df.empty:
-            st.metric('Views', '0', border=True)
+            views_contain.metric('Views', '0')
             if not single_day:
-                st.metric('Avg. Daily Views', '0', border=True)
+                views_contain.caption('0/day avg.')
         else:
-            st.metric('Views', f"{filtered_df['views'].sum():,}", delta=f'{views_delta:.2f}%' if views_delta is not None else None, 
-                      delta_color='grey' if views_delta == 0 else 'normal', border=True)
+            views_contain.metric('Views', f"{filtered_df['views'].sum():,}", delta=f'{views_delta:.2f}%' if views_delta is not None else None, 
+                      delta_color='grey' if views_delta == 0 else 'normal')
             if not single_day:
-                st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}", border=True)
+                #st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}", border=True)
+                views_contain.caption(f"{int(filtered_df['views'].mean()):,}/day avg.")
 
-    with col5:  # videos posted
+        # videos posted
+        videos_contain = st.container(border=True)
+
         if comparison_df.empty:
             videos_delta = None
         elif prev_videos == 0 and current_videos > 0:
@@ -281,14 +295,15 @@ with tab1:
             videos_delta = utils.calc_percent_change(current_videos, prev_videos)
 
         if filtered_df.empty:
-            st.metric('Videos Posted', '0', border=True)
+            videos_contain.metric('Videos Posted', '0')
             if not single_day:
-                st.metric('Avg. Daily Videos Posted', '0', border=True)
+                videos_contain.caption('0/day avg.')
         else:
-            st.metric('Videos Posted', f"{int(current_videos):,}", delta=f'{videos_delta:.2f}%' if videos_delta is not None else None, 
-                      delta_color='grey' if videos_delta == 0 else 'normal', border=True)
+            videos_contain.metric('Videos Posted', f"{int(current_videos):,}", delta=f'{videos_delta:.2f}%' if videos_delta is not None else None, 
+                      delta_color='grey' if videos_delta == 0 else 'normal')
             if not single_day:
-                st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}", border=True)
+                #st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}", border=True)
+                videos_contain.caption(f"{float(filtered_df['videos'].mean()):,.1f}/day avg.")
 
     with st.container(border=True):
         c1, c2, c3 = st.columns(3)
@@ -322,7 +337,7 @@ with tab1:
         # display conversion rate and quality
         with c2:
             if filtered_df.empty or filtered_df['views'].sum() == 0:
-                st.metric('Conversion Rate', '-', border=True)
+                st.metric('Conversion Rate', '-')
             else: 
                 conv_rate = metrics.conversion_rate(filtered_df)
                 if conv_rate >= 0.20:
@@ -348,7 +363,7 @@ with tab1:
         # display RPM and quality
         with c3:
             if filtered_df.empty or filtered_df['views'].sum() == 0:
-                st.metric('RPM', '-', border=True)
+                st.metric('RPM', '-')
             else:
                 rpm = metrics.rpm(filtered_df)
                 if rpm >= 10:
