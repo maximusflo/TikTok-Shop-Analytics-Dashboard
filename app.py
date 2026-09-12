@@ -460,7 +460,7 @@ with tab1:
 
 ### Daily Log tab
 with tab2:
-    left, right = st.columns([1.75, 1])
+    left, right = st.columns([3, 1])
 
     # data input
     with left:
