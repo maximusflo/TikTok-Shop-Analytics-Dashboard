@@ -601,6 +601,7 @@ with tab3:
     else: 
         progress = 0
         remaining = 0
+
     with goals_content.container():
         if goal is not None and goal != 0:
             st.markdown(f"### {selected_month.strftime('%B')} {selected_analytic} Goal", anchors=False)
@@ -622,29 +623,29 @@ with tab3:
             days_passed = today.day
             monthly_predict = (current_value / days_passed) * (days_left + days_passed)
 
-            goal_contain = st.container(horizontal=True)
+            goal_contain = st.container(horizontal=True, gap='xsmall')
 
             # current metric
             if current_value >= goal:
-                curr_delta = ':material/check_circle: Complete'
+                curr_delta = f':material/check_circle: ${(current_value / days_passed):,.2f}/day avg.'
             elif current_value != 0:
                 curr_delta = f'${(current_value / days_passed):,.2f}/day avg.'
             else:
                 curr_delta = f'$0/day avg.'
 
             goal_contain.metric('Current', f'${current_value:,.2f}', border=True, delta=curr_delta, 
-                                delta_arrow='off', delta_color='green' if curr_delta == ':material/check_circle: Complete' else 'off')
+                                delta_arrow='off', delta_color='green' if curr_delta == f':material/check_circle: ${(current_value / days_passed):,.2f}/day avg.' else 'off')
 
             # remaining metric
             if current_value >= goal:
-                remain_delta = ':material/check_circle: Complete'
+                remain_delta = ':material/check_circle: $0/day required'
             elif remaining_per_day < 0.01:
                 remain_delta = '<$0.01/day required'
             else:
                 remain_delta = f'${remaining_per_day:,.2f}/day required'
             
             goal_contain.metric('Remaining', f'${remaining:,.2f}', border=True, delta=remain_delta, 
-                                delta_arrow='off', delta_color='green' if remain_delta == ':material/check_circle: Complete' else 'off')
+                                delta_arrow='off', delta_color='green' if remain_delta == ':material/check_circle: $0/day required' else 'off')
 
             # projected metric
             if current_value >= goal:
