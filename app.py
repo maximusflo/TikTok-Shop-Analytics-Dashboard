@@ -198,10 +198,20 @@ with tab1:
         max_views_row = utils.get_max_row(filtered_df, 'views')
 
     # performance metrics
-    with st.container(horizontal=True, wrap=True):
+    with st.container(horizontal=True, wrap=True, gap='xsmall'):
 
         # commission
         comm_contain = st.container(border=True)
+
+        commission_diff = current_commission - prev_commission
+        if abs(commission_diff) >= 1_000_000:
+            commission_diff_delta = f'${(abs(commission_diff) / 1_000_000):,.1f}M'
+        elif abs(commission_diff) >= 10_000:
+            commission_diff_delta = f'${(abs(commission_diff) / 1_000):,.1f}K'
+        elif abs(commission_diff) >= 1_000:
+                commission_diff_delta = f'${abs(commission_diff):,.0f}'
+        else:
+            commission_diff_delta = f'${abs(commission_diff):,.2f}'
 
         if comparison_df.empty:
             commission_delta = None
@@ -215,14 +225,25 @@ with tab1:
             if not single_day:
                 comm_contain.caption('$0/day avg.')
         else:
-            comm_contain.metric('Commission', f"${current_commission:,.2f}", delta=f'{commission_delta:.2f}%' if commission_delta is not None else None, 
-                      delta_color='grey' if commission_delta == 0 else 'normal')
+            comm_contain.metric('Commission', f'${current_commission:,.2f}', 
+                                delta=f'{commission_delta:,.2f}% ({commission_diff_delta})' if commission_delta is not None else None, 
+                                delta_color='grey' if commission_delta == 0 else 'normal')
             if not single_day:
                 #st.metric('Avg. Daily Commission', f"${filtered_df['commission'].mean():,.2f}", border=True)
                 comm_contain.caption(f"${filtered_df['commission'].mean():,.2f}/day avg.")
 
         # GMV
         gmv_contain = st.container(border=True)
+
+        gmv_diff = current_gmv - prev_gmv
+        if abs(gmv_diff) >= 1_000_000:
+            gmv_diff_delta = f'${(abs(gmv_diff) / 1_000_000):,.1f}M'
+        elif abs(gmv_diff) >= 10_000:
+            gmv_diff_delta = f'${(abs(gmv_diff) / 1_000):,.1f}K'
+        elif abs(gmv_diff) >= 1_000:
+            gmv_diff_delta = f'${abs(gmv_diff):,.0f}'
+        else:
+            gmv_diff_delta = f'${abs(gmv_diff):,.2f}'
 
         if comparison_df.empty:
             gmv_delta = None
@@ -236,14 +257,23 @@ with tab1:
             if not single_day:
                 gmv_contain.caption('$0/day avg.')
         else:
-            gmv_contain.metric('GMV', f"${current_gmv:,.2f}", delta=f'{gmv_delta:.2f}%' if gmv_delta is not None else None, 
-                      delta_color='grey' if gmv_delta == 0 else 'normal')
+            gmv_contain.metric('GMV', f'${current_gmv:,.2f}', 
+                               delta=f'{gmv_delta:,.2f}% ({gmv_diff_delta})' if gmv_delta is not None else None, 
+                               delta_color='grey' if gmv_delta == 0 else 'normal')
             if not single_day:
                 #st.metric('Avg. Daily GMV', f"${filtered_df['gmv'].mean():,.2f}", border=True)
                 gmv_contain.caption(f"${filtered_df['gmv'].mean():,.2f}/day avg.")
 
         # items sold
         items_contain = st.container(border=True)
+
+        items_diff = current_items - prev_items
+        if abs(items_diff) >= 1_000_000:
+            items_diff_delta = f'{(abs(items_diff) / 1_000_000):.1f}M'
+        elif abs(items_diff) >= 1_000:
+            items_diff_delta = f'{(abs(items_diff) / 1_000):.1f}K'
+        else:
+            items_diff_delta = f'{abs(items_diff):,}'
 
         if comparison_df.empty:
             items_delta = None
@@ -257,14 +287,23 @@ with tab1:
             if not single_day:
                 items_contain.caption('0/day avg.')
         else:
-            items_contain.metric('Items Sold', f"{int(current_items):,}", delta=f'{items_delta:.2f}%' if items_delta is not None else None, 
-                      delta_color='grey' if items_delta == 0 else 'normal')
+            items_contain.metric('Items Sold', f'{int(current_items):,}', 
+                                 delta=f'{items_delta:.2f}% ({items_diff_delta})' if items_delta is not None else None, 
+                                 delta_color='grey' if items_delta == 0 else 'normal')
             if not single_day:
                 #st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}", border=True)
                 items_contain.caption(f"{filtered_df['items_sold'].mean():,.1f}/day avg.")
     
         # views
         views_contain = st.container(border=True)
+
+        views_diff = current_views - prev_views
+        if abs(views_diff) >= 1_000_000:
+            views_diff_delta = f'{(abs(views_diff) / 1_000_000):.1f}M'
+        elif abs(views_diff) >= 1_000:
+            views_diff_delta = f'{(abs(views_diff) / 1_000):.1f}K'
+        else:
+            views_diff_delta = f'{abs(views_diff):,}'
 
         if comparison_df.empty:
             views_delta = None
@@ -278,14 +317,21 @@ with tab1:
             if not single_day:
                 views_contain.caption('0/day avg.')
         else:
-            views_contain.metric('Views', f"{filtered_df['views'].sum():,}", delta=f'{views_delta:.2f}%' if views_delta is not None else None, 
-                      delta_color='grey' if views_delta == 0 else 'normal')
+            views_contain.metric('Views', f"{int(current_views):,}", 
+                                 delta=f'{views_delta:.2f}% ({views_diff_delta})' if views_delta is not None else None, 
+                                 delta_color='grey' if views_delta == 0 else 'normal')
             if not single_day:
                 #st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}", border=True)
                 views_contain.caption(f"{int(filtered_df['views'].mean()):,}/day avg.")
 
         # videos posted
         videos_contain = st.container(border=True)
+
+        videos_diff = current_videos - prev_videos
+        if abs(videos_diff) >= 1_000:
+            videos_diff_delta = f'{(abs(videos_diff) / 1_000):.1f}K'
+        else:
+            videos_diff_delta = f'{abs(videos_diff):,}'
 
         if comparison_df.empty:
             videos_delta = None
@@ -299,8 +345,9 @@ with tab1:
             if not single_day:
                 videos_contain.caption('0/day avg.')
         else:
-            videos_contain.metric('Videos Posted', f"{int(current_videos):,}", delta=f'{videos_delta:.2f}%' if videos_delta is not None else None, 
-                      delta_color='grey' if videos_delta == 0 else 'normal')
+            videos_contain.metric('Videos Posted', f'{int(current_videos):,}', 
+                                  delta=f'{videos_delta:.2f}% ({videos_diff_delta})' if videos_delta is not None else None, 
+                                  delta_color='grey' if videos_delta == 0 else 'normal')
             if not single_day:
                 #st.metric('Avg. Daily Videos Posted', f"{float(filtered_df['videos'].mean()):,.1f}", border=True)
                 videos_contain.caption(f"{float(filtered_df['videos'].mean()):,.1f}/day avg.")
