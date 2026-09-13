@@ -38,9 +38,9 @@ try:
     if not st.user.is_logged_in and not st.session_state.get('demo_mode', False):
         st.title('ZODIF', anchor=False, text_alignment='center')
 
-        st.markdown('#### Analytics for TikTok Shop creators.', anchors=False, text_alignment='center')
+        st.markdown('#### Analytics for TikTok Shop creators', anchors=False, text_alignment='center')
 
-        st.markdown('##### Track and analyze your affiliate performance data.', anchors=False, text_alignment='center')
+        st.markdown('##### Track and analyze your affiliate performance data', anchors=False, text_alignment='center')
 
         st.space()
 
@@ -49,13 +49,14 @@ try:
         if flex.button('Sign in with Google', icon=':material/login:'):
             st.login()
         
-        if flex.button('Try Demo', help='Explore Zodif with sample data'):
+        if flex.button('Try Demo', icon=':material/visibility:', help='Explore Zodif with sample data'):
             st.session_state.demo_mode = True
             st.rerun()
 
         st.space()
 
         st.image('images/screenshot.png', output_format='PNG')
+        st.image('images/screenshot2.png', output_format='PNG')
 
         st.markdown("""
         <style>
@@ -90,6 +91,7 @@ try:
     # side bar
     st.sidebar.title('Creator Analytics')
     if not st.session_state.get('demo_mode', False):
+        st.title('ZODIF', anchor=False)
         st.sidebar.write(f'Logged in as {st.user.name}')
         st.sidebar.write(f'Email: {st.user.email}')
         st.sidebar.space()
