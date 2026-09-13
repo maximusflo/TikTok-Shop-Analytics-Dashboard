@@ -1,18 +1,19 @@
-# TikTok Shop Analytics Dashboard
+# Zodif
 A full-stack data analytics dashboard built for TikTok Shop creators to track daily performance metrics over time.
 
 Built with Python, Streamlit, PostgreSQL, Supabase, Pandas, and Plotly.
 
-**[Live Demo](https://tiktok-shop-analytics-dashboard.streamlit.app/)**
+**[Live Demo](https://zodifapp.streamlit.app/)**
 
 ## Features
-- Google user authentication
 - Daily performance logging
 - Editable past entries
 - Demo mode with fictional data
 - Period-over-period comparisons
 - Persistent PostgreSQL database storage
 - Interactive analytics dashboard
+- Google user authentication
+- Authorized-user access control
 - Date range filtering
 - Metric calculations
 - Commission rate analysis
