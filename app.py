@@ -7,6 +7,7 @@ import utils
 import database
 from sqlalchemy import text
 from zoneinfo import ZoneInfo
+import time
 
 st.set_page_config(page_title='Creator Analytics', page_icon='images/logo.png', layout='wide')
 
@@ -508,7 +509,7 @@ with tab2:
     with st.container(width='content'):
         warning_box = st.empty()
         if utils.date_exists(df, current_date):
-            warning_box.info(f'About to update entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/info_i:')
+            warning_box.badge(f'About to update entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/info_i:')
             button_label = 'Update'
 
     if st.button(button_label):
@@ -537,8 +538,6 @@ with tab2:
                 session.commit()
 
             df = utils.load_data(connection, user_id)
-            with st.container(width='content'):
-                st.success(f'Saved entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}.', icon=':material/check_circle:')
 
         # updating existing entry
         else:
@@ -567,9 +566,6 @@ with tab2:
                 session.commit()
 
             df = utils.load_data(connection, user_id)
-            with st.container(width='content'):
-                warning_box.empty()
-                st.success(f'Updated entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/check_circle:')
 
         st.rerun()
 
