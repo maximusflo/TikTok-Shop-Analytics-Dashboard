@@ -571,6 +571,8 @@ with tab2:
                 warning_box.empty()
                 st.success(f'Updated entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/check_circle:')
 
+        st.rerun()
+
 ### Goals tab
 with tab3:
     goals_content = st.empty()
