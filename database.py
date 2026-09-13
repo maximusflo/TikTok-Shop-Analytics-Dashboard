@@ -47,3 +47,18 @@ def load_goal(connection, user_id, month, analytic):
         return None
 
     return result.iloc[0]['goal']
+
+def is_authorized_user(connection, user_id):
+    query = '''
+        SELECT 1
+        FROM authorized_users
+        WHERE user_id = :user_id
+    '''
+
+    result = connection.query(
+        query,
+        params={'user_id': user_id},
+        ttl=0
+    )
+
+    return not result.empty

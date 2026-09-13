@@ -11,7 +11,7 @@ import time
 
 
 try:
-    st.set_page_config(page_title='Creator Analytics', page_icon='images/logo.png', layout='wide')
+    st.set_page_config(page_title='Zodif', page_icon='images/logo.png', layout='wide')
 
     today = datetime.datetime.now(ZoneInfo('America/Chicago')).date()
 
@@ -36,16 +36,20 @@ try:
 
     # user authentication
     if not st.user.is_logged_in and not st.session_state.get('demo_mode', False):
-        st.title('Creator Analytics', anchor=False, text_alignment='center')
+        st.title('ZODIF', anchor=False, text_alignment='center')
+
+        st.markdown('#### Analytics for TikTok Shop creators.', anchors=False, text_alignment='center')
+
         st.markdown('##### Track and analyze your affiliate performance data.', anchors=False, text_alignment='center')
 
         st.space()
 
-        flex = st.container(horizontal=True, horizontal_alignment='center')
+        flex = st.container(horizontal_alignment='center')
 
         if flex.button('Sign in with Google', icon=':material/login:'):
             st.login()
-        if flex.button('Try Demo'):
+        
+        if flex.button('Try Demo', help='Explore Zodif with sample data'):
             st.session_state.demo_mode = True
             st.rerun()
 
@@ -70,13 +74,18 @@ try:
 
         st.stop()
 
+    # initialize database
+    connection = database.get_connection()
+
     if st.session_state.get('demo_mode', False):
         user_id = DEMO_USER_ID
     else:
         user_id = st.user.email
 
-    # initialize database
-    connection = database.get_connection()
+        if not database.is_authorized_user(connection, user_id):
+            st.error("You don't have access to Zodif yet.")
+            time.sleep(3)
+            st.logout()
 
     # side bar
     st.sidebar.title('Creator Analytics')
@@ -86,7 +95,7 @@ try:
         st.sidebar.space()
         st.sidebar.button('Log out', on_click=st.logout)
     else:
-        st.title('Creator Analytics - DEMO MODE', anchor=False)
+        st.title('ZODIF - DEMO MODE', anchor=False)
         st.info('*All data shown is fictional and for demonstration purposes only.*', icon=':material/info_i:')
 
         st.sidebar.write(f'Logged in as demo user')
