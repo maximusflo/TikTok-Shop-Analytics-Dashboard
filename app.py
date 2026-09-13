@@ -55,8 +55,10 @@ try:
 
         st.space()
 
-        st.image('images/screenshot.png', output_format='PNG')
-        st.image('images/screenshot2.png', output_format='PNG')
+        img_contain = st.container(horizontal_alignment='center', width=2000)
+
+        img_contain.image('images/screenshot.png', output_format='PNG', width=1000)
+        img_contain.image('images/screenshot2.png', output_format='PNG', width=1000)
 
         st.markdown("""
         <style>
