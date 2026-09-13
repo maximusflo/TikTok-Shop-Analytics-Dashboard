@@ -129,6 +129,8 @@ with tab1:
 
     selected_filter = st.pills(label='Filter', label_visibility='collapsed', options=['Today', 'Yesterday', '7 Day', '30 Day', 'Custom'], default='Today',  key='date_filter')
 
+    prev_filter = st.session_state.get('prev_filter')
+
     # today button
     if selected_filter == 'Today':
         start_date = today
@@ -158,7 +160,10 @@ with tab1:
         start_date = st.session_state.start_date
         end_date = st.session_state.end_date
 
-        date_picker()
+        if prev_filter != 'Custom':
+            date_picker()
+
+    st.session_state.prev_filter = selected_filter
 
     if start_date == end_date:
         single_day = True
