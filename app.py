@@ -499,9 +499,9 @@ with tab2:
 
             items_sold = utils.integer_input('items_sold', 'Items Sold', df, current_date)
 
-            videos = utils.integer_input('videos', 'Videos Posted', df, current_date)
-
             views = utils.integer_input('views', 'Views', df, current_date)
+
+            videos = utils.integer_input('videos', 'Videos Posted', df, current_date)
 
         button_label = 'Save'
 
