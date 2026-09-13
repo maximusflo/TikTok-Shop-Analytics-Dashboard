@@ -205,9 +205,10 @@ with tab1:
     # performance metrics
     with st.container(horizontal=True, wrap=True, gap='xsmall'):
 
-        # commission
+    # commission
         comm_contain = st.container(border=True)
 
+        # delta formatting
         commission_diff = current_commission - prev_commission
         if abs(commission_diff) >= 1_000_000:
             commission_diff_delta = f'${(abs(commission_diff) / 1_000_000):,.1f}M'
@@ -237,9 +238,10 @@ with tab1:
                 #st.metric('Avg. Daily Commission', f"${filtered_df['commission'].mean():,.2f}", border=True)
                 comm_contain.caption(f"${filtered_df['commission'].mean():,.2f}/day avg.")
 
-        # GMV
+    # GMV
         gmv_contain = st.container(border=True)
 
+        # delta formatting
         gmv_diff = current_gmv - prev_gmv
         if abs(gmv_diff) >= 1_000_000:
             gmv_diff_delta = f'${(abs(gmv_diff) / 1_000_000):,.1f}M'
@@ -269,9 +271,10 @@ with tab1:
                 #st.metric('Avg. Daily GMV', f"${filtered_df['gmv'].mean():,.2f}", border=True)
                 gmv_contain.caption(f"${filtered_df['gmv'].mean():,.2f}/day avg.")
 
-        # items sold
+    # items sold
         items_contain = st.container(border=True)
 
+        # delta formatting
         items_diff = current_items - prev_items
         if abs(items_diff) >= 1_000_000:
             items_diff_delta = f'{(abs(items_diff) / 1_000_000):.1f}M'
@@ -299,9 +302,10 @@ with tab1:
                 #st.metric('Avg. Daily Items Sold', f"{float(filtered_df['items_sold'].mean()):,.1f}", border=True)
                 items_contain.caption(f"{filtered_df['items_sold'].mean():,.1f}/day avg.")
     
-        # views
+    # views
         views_contain = st.container(border=True)
 
+        # delta formatting
         views_diff = current_views - prev_views
         if abs(views_diff) >= 1_000_000:
             views_diff_delta = f'{(abs(views_diff) / 1_000_000):.1f}M'
@@ -329,9 +333,10 @@ with tab1:
                 #st.metric('Avg. Daily Views', f"{int(filtered_df['views'].mean()):,}", border=True)
                 views_contain.caption(f"{int(filtered_df['views'].mean()):,}/day avg.")
 
-        # videos posted
+    # videos posted
         videos_contain = st.container(border=True)
 
+        # delta formatting
         videos_diff = current_videos - prev_videos
         if abs(videos_diff) >= 1_000:
             videos_diff_delta = f'{(abs(videos_diff) / 1_000):.1f}K'
@@ -382,9 +387,11 @@ with tab1:
                 else:
                     comparison_c_rate = metrics.avg_commission_rate(comparison_df)
                     delta = utils.calc_percent_change(avg_c_rate, comparison_c_rate)
+                    c_rate_diff = f'{abs(comparison_c_rate - metrics.avg_commission_rate(filtered_df)):.1f}%'
 
-                st.metric('Avg. Commission Rate', f"{avg_c_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, 
-                        delta_color='grey' if delta == 0 else 'normal')
+                st.metric('Avg. Commission Rate', f"{avg_c_rate}% - {quality}", 
+                          delta=f'{delta:.2f}% ({c_rate_diff})' if delta is not None else None, 
+                          delta_color='grey' if delta == 0 else 'normal')
 
         # display conversion rate and quality
         with c2:
@@ -408,9 +415,11 @@ with tab1:
                 else:
                     comparison_conv_rate = metrics.conversion_rate(comparison_df)
                     delta = utils.calc_percent_change(conv_rate, comparison_conv_rate)
+                    conv_rate_diff = f'{abs(comparison_conv_rate - metrics.conversion_rate(filtered_df)):.4f}%'
 
-                st.metric('Conversion Rate', f"{conv_rate}% - {quality}", delta=f'{delta:.2f}%' if delta is not None else None, 
-                        delta_color='grey' if delta == 0 else 'normal')
+                st.metric('Conversion Rate', f"{conv_rate}% - {quality}", 
+                          delta=f'{delta:.2f}% ({conv_rate_diff})' if delta is not None else None, 
+                          delta_color='grey' if delta == 0 else 'normal')
 
         # display RPM and quality
         with c3:
@@ -434,9 +443,11 @@ with tab1:
                 else:
                     comparison_rpm = metrics.rpm(comparison_df)
                     delta = utils.calc_percent_change(rpm, comparison_rpm)
+                    rpm_diff = f'${abs(comparison_rpm - metrics.rpm(filtered_df)):.2f}'
 
-                st.metric('RPM', f'${rpm} - {quality}', delta=f'{delta:.2f}%' if delta is not None else None, 
-                        delta_color='grey' if delta == 0 else 'normal')
+                st.metric('RPM', f'${rpm:.2f} - {quality}', 
+                          delta=f'{delta:.2f}% ({rpm_diff})' if delta is not None else None, 
+                          delta_color='grey' if delta == 0 else 'normal')
 
     if not single_day:
 
