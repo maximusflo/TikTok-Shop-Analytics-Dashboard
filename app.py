@@ -610,7 +610,11 @@ with tab3:
 
             prog_contain = st.container(horizontal=True)
             with prog_contain:
-                st.progress(progress, text=f'{(progress*100):.1f}%')
+                prog_perc = f'{progress*100:.0f}%'
+                if progress > 0.99 and progress < 1.0:
+                    prog_perc = '99%'
+
+                st.progress(progress, text=prog_perc)
                 #st.markdown(f'#### {(progress*100):.0f}%', anchors=False)
                 st.markdown(f'### ${goal:,.0f}', anchors=False)
 
