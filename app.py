@@ -86,9 +86,9 @@ try:
         user_id = st.user.email
 
         if not database.is_authorized_user(connection, user_id):
-            st.error("You don't have access to Zodif yet.")
-            time.sleep(3)
-            st.logout()
+            st.error("You don't have access to Zodif yet.\nTry the Demo to explore the dashboard.")
+            if st.button('Back'):
+                st.logout()
 
     # side bar
     st.sidebar.title('Creator Analytics')
