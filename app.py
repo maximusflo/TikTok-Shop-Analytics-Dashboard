@@ -470,13 +470,13 @@ try:
             # commission line chart
             commission_fig = px.line(filtered_df, x='date', y='commission', title='Daily Commission')
             commission_fig.update_traces(line=dict(color='springgreen'), hovertemplate='%{x}<br>$%{y:.2f}<extra></extra>')
-            commission_fig.update_layout(xaxis=dict(fixedrange=True, title=None), yaxis=(dict(tickprefix='$', fixedrange=True, title=None)), dragmode=False)
+            commission_fig.update_layout(xaxis=dict(fixedrange=True, title=None), yaxis=(dict(tickprefix='$', fixedrange=True, title=None, rangemode='tozero')), dragmode=False)
             st.plotly_chart(commission_fig, width='stretch', config={'displayModeBar': False, 'staticPlot': False})
         
             # views line chart
             views_fig = px.line(filtered_df, x='date', y='views', title='Daily Views')
             views_fig.update_traces(line=dict(color='royalblue'), hovertemplate='%{x}<br>%{y}<extra></extra>')
-            views_fig.update_layout(xaxis=dict(fixedrange=True, title=None), yaxis=(dict(fixedrange=True, title=None)), dragmode=False)
+            views_fig.update_layout(xaxis=dict(fixedrange=True, title=None), yaxis=(dict(fixedrange=True, title=None, rangemode='tozero')), dragmode=False)
             st.plotly_chart(views_fig, width='stretch', config={'displayModeBar': False, 'staticPlot': False})
 
             # GMV line chart
