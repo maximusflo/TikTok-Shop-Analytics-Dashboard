@@ -128,8 +128,8 @@ try:
                 max_date = df['date'].max()
                 date_range = st.date_input('Date Range', value=(st.session_state.start_date, st.session_state.end_date))
             else:
-                today = datetime.datetime.now(ZoneInfo("America/Chicago")).date()
-                date_range = st.date_input('Date Range', value=(today, today))
+                today_new = datetime.datetime.now(ZoneInfo("America/Chicago")).date()
+                date_range = st.date_input('Date Range', value=(today_new, today_new))
                 
             if isinstance(date_range, tuple) and len(date_range) == 2:
                 selected_start = date_range[0]
@@ -138,12 +138,38 @@ try:
                 selected_start = date_range
                 selected_end = date_range
 
+            selected_range = st.pills(label='filter', label_visibility='collapsed', options=['7 Days', '30 Days', '90 Days', 'All Time'])
+
+            # 7 days button
+            if selected_range == '7 Days':
+                st.session_state.start_date = today - datetime.timedelta(days=6)
+                st.session_state.end_date = today
+                st.rerun()
+    
+            # 30 days button
+            elif selected_range == '30 Days':
+                st.session_state.start_date = today - datetime.timedelta(days=29)
+                st.session_state.end_date = today
+                st.rerun()
+
+            # 90 days button
+            elif selected_range == '90 Days':
+                st.session_state.start_date = today - datetime.timedelta(days=89)
+                st.session_state.end_date = today
+                st.rerun()
+
+            # all-time button
+            elif selected_range == 'All Time':
+                st.session_state.start_date = min_date
+                st.session_state.end_date = max_date
+                st.rerun()
+
             if st.button('Apply'):
                 st.session_state.start_date = selected_start
                 st.session_state.end_date = selected_end
                 st.rerun()
 
-        selected_filter = st.pills(label='Filter', label_visibility='collapsed', options=['Today', 'Yesterday', '7 Day', '30 Day', 'Custom'], default='Today',  key='date_filter')
+        selected_filter = st.pills(label='Filter', label_visibility='collapsed', options=['Today', 'Yesterday', 'MTD', 'YTD', 'Custom'], default='Today',  key='date_filter')
 
         prev_filter = st.session_state.get('prev_filter')
 
@@ -157,14 +183,14 @@ try:
             start_date = today - datetime.timedelta(days=1)
             end_date = start_date
 
-        # 7 days button
-        elif selected_filter == '7 Day':
-            start_date = today - datetime.timedelta(days=6)
+        # MTD button
+        elif selected_filter == 'MTD':
+            start_date = today.replace(day=1)
             end_date = today
 
-        # 30 days button
-        elif selected_filter == '30 Day':
-            start_date = today - datetime.timedelta(days=29)
+        # YTD button
+        elif selected_filter == 'YTD':
+            start_date = today.replace(month=1, day=1)
             end_date = today
 
         # custom button
