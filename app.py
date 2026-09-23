@@ -577,6 +577,8 @@ try:
                     )
                     
                     session.commit()
+                    warning_box.badge(f'Saved entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/check:', color='green')
+                    time.sleep(1)
 
                 df = utils.load_data(connection, user_id)
 
@@ -605,6 +607,8 @@ try:
                         }
                     )
                     session.commit()
+                    warning_box.badge(f'Updated entry for {current_date.strftime('%b %d, %Y').replace(' 0', ' ')}', icon=':material/check:', color='green')
+                    time.sleep(1)
 
                 df = utils.load_data(connection, user_id)
 
@@ -718,7 +722,7 @@ try:
                     goal_contain.metric('Projected', f'${monthly_predict:,.2f}', border=True, delta=proj_delta, delta_arrow='off', 
                                         delta_color='red' if proj_delta == ':material/trending_down: Behind' else 'green')
                 else:
-                    goal_contain.metric('Projected', '-', border=True)
+                    goal_contain.metric('Projected', '-', border=True, delta='No data.', delta_arrow='off', delta_color='off')
 
                 if progress == 1.0:
                     st.markdown(f"##### {selected_month.strftime('%B')} {selected_analytic} goal completed. Nice work.", anchors=False)
@@ -729,6 +733,12 @@ try:
     ### Data tab
     with tab4:
         st.title('All Data', anchor=False)
+
+        if df.empty:
+            st.caption('No data yet. Add your first daily entry to get started.')
+        else:
+            last_updt = df['date'].max()
+            st.caption(f"**Last updated:** {last_updt.strftime('%b %d, %Y').replace(' 0', ' ')} (CDT)")
 
         left1, right1 = st.columns(2)
         
@@ -744,6 +754,7 @@ try:
                     hide_index=True,
                     width='stretch'
             )
+
 except Exception as e:
     st.error('Something went wrong. Please try again.')
     print(f'Error: {e}')
