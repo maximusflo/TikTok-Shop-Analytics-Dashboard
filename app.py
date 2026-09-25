@@ -53,13 +53,6 @@ try:
             st.session_state.demo_mode = True
             st.rerun()
 
-        st.space()
-
-        img_contain = st.container(horizontal_alignment='center', width=2000)
-
-        img_contain.image('images/screenshot.png', output_format='PNG', width=1000)
-        img_contain.image('images/screenshot2.png', output_format='PNG', width=1000)
-
         st.markdown("""
         <style>
         .footer {
