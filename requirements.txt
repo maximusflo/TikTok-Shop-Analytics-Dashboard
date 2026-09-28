@@ -1,7 +1,7 @@
 streamlit
 pandas
 plotly
-psycopg[binary]
+psycopg2-binary
 sqlalchemy
 Authlib
 httpx
