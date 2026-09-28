@@ -99,7 +99,7 @@ try:
         st.sidebar.space()
         st.sidebar.button('Exit Demo', on_click=st.logout)
 
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(['Analytics', 'Daily Log', 'Summary', 'Goals', 'Data'])
+    tab1, tab2, tab3, tab4 = st.tabs(['Analytics', 'Daily Log', 'Goals', 'Data'])
 
     df = utils.load_data(connection, user_id)
 
@@ -607,37 +607,8 @@ try:
 
             st.rerun()
 
-    ### Summary tab
-    with tab3:
-        days_in_month = pd.Timestamp.now().days_in_month
-        time_range = st.date_input('Date', value=today, width=110)
-
-        st.markdown(f"#### If every day were like {time_range.strftime('%b %d, %Y')}", anchors=False)
-
-        today_commission = df.loc[df['date']==time_range, 'commission'].iloc[0]
-        est_commission = today_commission * days_in_month
-
-        today_gmv = df.loc[df['date']==time_range, 'gmv'].iloc[0]
-        est_gmv = today_gmv * days_in_month
-
-        today_items = df.loc[df['date']==time_range, 'items_sold'].iloc[0]
-        est_items = today_items * days_in_month
-
-        today_views = df.loc[df['date']==time_range, 'views'].iloc[0]
-        est_views = today_views * days_in_month
-
-        today_videos = df.loc[df['date']==time_range, 'videos'].iloc[0]
-        est_videos = today_videos * days_in_month
-
-        with st.container(horizontal=True):
-            st.metric('Est. Monthly Commission', value=f'${est_commission:,.2f}', border=True)
-            st.metric('Est. Monthly GMV', value=f'${est_gmv:,.2f}', border=True)
-            st.metric('Est. Monthly Items Sold', value=f'{est_items:,.0f}', border=True)
-            st.metric('Est. Monthly Views', value=f'{est_views:,.0f}', border=True)
-            st.metric('Est. Monthly Videos', value=f'{est_videos:,.0f}', border=True)
-
     ### Goals tab
-    with tab4:
+    with tab3:
         goals_content = st.empty()
 
         with st.popover('Goal options', wrap=True):
@@ -753,7 +724,7 @@ try:
                 st.markdown('#### No current goal.', anchors=False)
 
     ### Data tab
-    with tab5:
+    with tab4:
         st.title('All Data', anchor=False)
 
         if df.empty:
