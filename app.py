@@ -779,5 +779,5 @@ try:
 
 except Exception as e:
     st.error('Something went wrong. Please try again.')
-    #st.exception(e)
+    st.exception(e)
     print(f'Error: {e}')
