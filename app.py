@@ -452,7 +452,12 @@ try:
                         delta = utils.calc_percent_change(conv_rate, comparison_conv_rate)
                         conv_rate_diff = f'{abs(comparison_conv_rate - metrics.conversion_rate(filtered_df)):.4f}%'
 
-                    st.metric('Conversion Rate', f"{conv_rate}% - {quality}", 
+                    items_sold = filtered_df['items_sold'].sum()
+                    views = filtered_df['views'].sum()
+                    views_per_sale = round(views / items_sold)
+
+                    st.metric('Conversion Rate', f"{conv_rate}% - {quality}",
+                    #st.metric('Conversion Rate', f"1 / {views_per_sale:,} views - {quality}",
                             delta=f'{delta:.2f}% ({conv_rate_diff})' if delta is not None else None, 
                             delta_color='grey' if delta == 0 else 'normal')
 
@@ -466,9 +471,9 @@ try:
                         quality = 'Excellent'
                     elif rpm >= 5:
                         quality = 'Great'
-                    elif rpm >= 1.5:
-                        quality = 'Good'
                     elif rpm >= 1:
+                        quality = 'Good'
+                    elif rpm >= 0.5:
                         quality = 'Weak'
                     else:
                         quality = 'Poor'
