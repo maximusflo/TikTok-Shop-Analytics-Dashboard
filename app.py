@@ -430,7 +430,7 @@ try:
 
             # display views per item sold and quality
             with c2:
-                if filtered_df.empty or filtered_df['views'].sum() == 0:
+                if filtered_df.empty or filtered_df['items_sold'].sum() == 0:
                     st.metric('Views per Item Sold', '-')
                 else: 
                     views_per_sale = metrics.views_per_item_sold(filtered_df)
