@@ -434,13 +434,13 @@ try:
                     st.metric('Views per Item Sold', '-')
                 else: 
                     views_per_sale = metrics.views_per_item_sold(filtered_df)
-                    if views_per_sale <= 250:
+                    if views_per_sale <= 500:
                         quality = 'Excellent'
-                    elif views_per_sale <= 500:
+                    elif views_per_sale <= 1000:
                         quality = 'Great'
-                    elif views_per_sale <= 1500:
-                        quality = 'Good'
                     elif views_per_sale <= 2500:
+                        quality = 'Good'
+                    elif views_per_sale <= 5000:
                         quality = 'Weak'
                     else:
                         quality = 'Poor'
