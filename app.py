@@ -438,7 +438,7 @@ try:
                         quality = 'Excellent'
                     elif views_per_sale <= 500:
                         quality = 'Great'
-                    elif views_per_sale <= 1000:
+                    elif views_per_sale <= 1500:
                         quality = 'Good'
                     elif views_per_sale <= 2500:
                         quality = 'Weak'
@@ -462,9 +462,9 @@ try:
                     st.metric('RPM', '-')
                 else:
                     rpm = metrics.rpm(filtered_df)
-                    if rpm >= 10:
+                    if rpm >= 5:
                         quality = 'Excellent'
-                    elif rpm >= 5:
+                    elif rpm >= 2.5:
                         quality = 'Great'
                     elif rpm >= 1:
                         quality = 'Good'
@@ -750,5 +750,5 @@ try:
 
 except Exception as e:
     st.error('Something went wrong. Please try again.')
-    st.exception(e)
+    #st.exception(e)
     print(f'Error: {e}')
