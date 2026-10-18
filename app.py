@@ -428,19 +428,19 @@ try:
                             delta=f'{delta:.2f}% ({c_rate_diff})' if delta is not None else None, 
                             delta_color='grey' if delta == 0 else 'normal')
 
-            # display conversion rate and quality
+            # display views per item sold and quality
             with c2:
                 if filtered_df.empty or filtered_df['views'].sum() == 0:
-                    st.metric('Conversion Rate', '-')
+                    st.metric('Views per Item Sold', '-')
                 else: 
-                    conv_rate = metrics.conversion_rate(filtered_df)
-                    if conv_rate >= 0.20:
+                    views_per_sale = metrics.views_per_item_sold(filtered_df)
+                    if views_per_sale <= 250:
                         quality = 'Excellent'
-                    elif conv_rate >= 0.10:
+                    elif views_per_sale <= 500:
                         quality = 'Great'
-                    elif conv_rate >= 0.05:
+                    elif views_per_sale <= 1000:
                         quality = 'Good'
-                    elif conv_rate >= 0.01:
+                    elif views_per_sale <= 2500:
                         quality = 'Weak'
                     else:
                         quality = 'Poor'
@@ -448,18 +448,13 @@ try:
                     if comparison_df.empty or comparison_df['views'].sum(0) == 0:
                         delta = None
                     else:
-                        comparison_conv_rate = metrics.conversion_rate(comparison_df)
-                        delta = utils.calc_percent_change(conv_rate, comparison_conv_rate)
-                        conv_rate_diff = f'{abs(comparison_conv_rate - metrics.conversion_rate(filtered_df)):.4f}%'
+                        comparison_vps_rate = metrics.views_per_item_sold(comparison_df)
+                        delta = utils.calc_percent_change(views_per_sale, comparison_vps_rate)
+                        vps_diff = f'{abs(comparison_vps_rate - metrics.views_per_item_sold(filtered_df)):,.0f}'
 
-                    items_sold = filtered_df['items_sold'].sum()
-                    views = filtered_df['views'].sum()
-                    views_per_sale = round(views / items_sold)
-
-                    st.metric('Conversion Rate', f"{conv_rate}% - {quality}",
-                    #st.metric('Conversion Rate', f"1 / {views_per_sale:,} views - {quality}",
-                            delta=f'{delta:.2f}% ({conv_rate_diff})' if delta is not None else None, 
-                            delta_color='grey' if delta == 0 else 'normal')
+                    st.metric('Views per Item Sold', f"{views_per_sale:,} - {quality}",
+                            delta=f'{delta:.2f}% ({vps_diff})' if delta is not None else None, 
+                            delta_color='grey' if delta == 0 else 'inverse')
 
             # display RPM and quality
             with c3:

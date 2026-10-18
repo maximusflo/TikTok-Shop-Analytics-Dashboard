@@ -24,6 +24,19 @@ def conversion_rate(df):
     conv_rate = conversions / views * 100
     return round(conv_rate, 4)
 
+def views_per_item_sold(df):
+    '''
+    Calculates the number of views per one item sold.
+    '''
+    views = df['views'].sum()
+    items = df['items_sold'].sum()
+
+    if views == 0:
+        return 0
+
+    veiws_per_item = views / items
+    return int(veiws_per_item)
+
 def rpm(df):
     '''
     Calculates commission per 1,000 views.
