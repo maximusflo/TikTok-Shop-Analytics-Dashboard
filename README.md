@@ -17,7 +17,7 @@ Built with Python, Streamlit, PostgreSQL, Supabase, Pandas, and Plotly.
 - Date range filtering
 - Metric calculations
 - Commission rate analysis
-- Conversion rate analysis
+- Views per item sold analysis
 - RPM analysis
 - Monthly goal setting and tracking
 - Visualizations
@@ -28,7 +28,7 @@ Built with Python, Streamlit, PostgreSQL, Supabase, Pandas, and Plotly.
 - Items Sold
 - Videos
 - Views
-- Conversion Rate
+- Views per Item Sold
 - Average Commission Rate
 - Revenue per Thousand Views (RPM)
 
