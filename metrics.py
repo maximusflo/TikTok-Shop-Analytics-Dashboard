@@ -31,7 +31,7 @@ def views_per_item_sold(df):
     views = df['views'].sum()
     items = df['items_sold'].sum()
 
-    if views == 0:
+    if items == 0:
         return 0
 
     veiws_per_item = views / items
